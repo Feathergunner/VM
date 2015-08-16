@@ -1,0 +1,18 @@
+VAR eins
+VAR zwei
+VAR drei
+BEGIN
+NOP
+NOP
+NOP
+NOP
+LDC 10
+LD0
+ADD
+STR eins
+LDC 5
+ADD
+STR zwei
+EAD eins zwei
+STR drei
+STP
