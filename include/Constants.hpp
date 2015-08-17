@@ -11,7 +11,9 @@ const uint8_t BYTESIZE_OF_ADRESSSPACE = 2;
 // upper bound to number of instructions:
 const uint8_t NUMBER_OF_INSTRUCTIONS = 0x2F;
 
-// disassebmle
+// disassemble
+// "NU" stands for "not used" and is mapped to NOP by the vm
+// every other value greater than NUMBER_OF_INSTRUCTIONS is also NU
 const std::vector<std::string> ASM_SYMBOLS = {
 "STP",		// 0x00
 "JMP",		// 0x01
@@ -84,37 +86,37 @@ const std::vector<int> INSTRUCTION_PARAMCOUNT = {
 2,		// 0x0F
 
 0,		// 0x10
-	0,	// 0x11
+	-1,	// 0x11
 1,		// 0x12
 1,		// 0x13
 1,		// 0x14
 1,		// 0x15
-	0,	// 0x16
-	0,	// 0x17
-	0,	// 0x18
-	0,	// 0x19
+	-1,	// 0x16
+	-1,	// 0x17
+	-1,	// 0x18
+	-1,	// 0x19
 0,		// 0x1A
 0,		// 0x1B
 0,		// 0x1C
 0,		// 0x1D
-	0,	// 0x1E
-	0,	// 0x1F
+	-1,	// 0x1E
+	-1,	// 0x1F
 
-	0,	// 0x20
-	0,	// 0x21
-	0,	// 0x22
-	0,	// 0x23
+	-1,	// 0x20
+	-1,	// 0x21
+	-1,	// 0x22
+	-1,	// 0x23
 2,		// 0x24
 2,		// 0x25
-	0,	// 0x26
-	0,	// 0x27
+	-1,	// 0x26
+	-1,	// 0x27
 2,		// 0x28
 2,		// 0x29
-	0,	// 0x2A
-	0,	// 0x2B
+	-1,	// 0x2A
+	-1,	// 0x2B
 2,		// 0x2C
-	0,	// 0x2D
-	0,	// 0x2E
-	0	// 0x2F
+	-1,	// 0x2D
+	-1,	// 0x2E
+	-1	// 0x2F
 };
 #endif

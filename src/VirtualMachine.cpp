@@ -86,6 +86,11 @@ void VirtualMachine::run(int debug)
 {
 	printf("Starting Virtual Machine...\n");
 	cycles = 0;
+	if (debug == 1)
+	{
+		printf("%8s | %8s | %5s %12s %12s %12s\n", "cycle", "ic", "instr", "src", "dest", "val");
+		printf("---------|----------|---------------------------------------------\n");
+	}
 	while(cpu->next_cycle(debug))
 	{
 		cycles++;
@@ -109,6 +114,9 @@ void VirtualMachine::printRAM(const char* filename)
 void VirtualMachine::print_statistics()
 {
 	for (int i=0; i<NUMBER_OF_INSTRUCTIONS; i++)
-		printf("instruction %#X:\n\tnumber of calls: %i\n\n", i, number_of_calls[i]);
-	printf("Number of processor cycles: %i", cycles);
+	{
+		if (INSTRUCTION_PARAMCOUNT[i] >= 0)
+			printf("instruction %#X:\n\tnumber of calls: %i\n\n", i, number_of_calls[i]);
+	}
+	printf("Number of processor cycles: %i\n", cycles);
 }
