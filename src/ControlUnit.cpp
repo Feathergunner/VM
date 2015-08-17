@@ -59,7 +59,7 @@ bool ControlUnit::next_cycle(bool debug)
 				if (debug)
 					printf("conditional jump to %#X\n", dest);
 			} else {
-				ic += 5;
+				ic += 1+BYTESIZE_OF_ADRESSSPACE;
 				if (debug)
 					printf("condition of jump not fulfilled\n");
 			}		
@@ -75,7 +75,7 @@ bool ControlUnit::next_cycle(bool debug)
 				if (debug)
 					printf("conditional jump to %#X\n", dest);
 			} else {
-				ic += 5;
+				ic += 1+BYTESIZE_OF_ADRESSSPACE;
 				if (debug)
 					printf("condition of jump not fulfilled\n");
 			}
@@ -91,7 +91,7 @@ bool ControlUnit::next_cycle(bool debug)
 				if (debug)
 					printf("conditional jump to %#X\n", dest);
 			} else {
-				ic += 5;
+				ic += 1+BYTESIZE_OF_ADRESSSPACE;
 				if (debug)
 					printf("conditional jump to %#X\n", dest);
 			}
@@ -108,7 +108,7 @@ bool ControlUnit::next_cycle(bool debug)
 				if (debug)
 					printf("conditional jump to %#X\n", dest);
 			} else {
-				ic += 5;
+				ic += 1+BYTESIZE_OF_ADRESSSPACE;
 				if (debug)
 					printf("conditional jump to %#X\n", dest);
 			}
@@ -205,7 +205,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			alu->writeA(value);
 			
-			ic += 5;
+			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
 			if (debug)
 				printf("write %i from ram[%i] to reg_A\n", value, source);
@@ -218,7 +218,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			alu->writeB(value);
 			
-			ic += 5;
+			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
 			if (debug)
 				printf("write %i from ram[%i] to reg_B\n", value, source);
@@ -230,7 +230,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			alu->writeA(value);
 			
-			ic += 5;
+			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
 			if (debug)
 				printf("write %i to reg_A\n", value);
@@ -296,7 +296,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ram->store_int(value, dest);
 			
-			ic += 5;
+			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
 			if (debug)
 				printf("store %i (from reg_C) to ram[%i]\n", value, dest);
@@ -306,11 +306,11 @@ bool ControlUnit::next_cycle(bool debug)
 			// move data within RAM
 			source = ram->get_int(ic+1);
 			
-			dest = ram->get_int(ic+5);
+			dest = ram->get_int(ic+1+BYTESIZE_OF_ADRESSSPACE);
 			
 			ram->move(source, dest);
 			
-			ic += 9;
+			ic += 1 + 2*BYTESIZE_OF_ADRESSSPACE;
 			
 			if (debug)
 				printf("move data in ram from %i to %i\n", source, dest);
@@ -329,10 +329,10 @@ bool ControlUnit::next_cycle(bool debug)
 		-----------------------------------------------------------------------------------------
 		*/
 		default:
-			// stop programm
+			// NOP
+			ic++;
 			if (debug)
-				printf("unknown instruction. stop.\n");
-			return false;
+				printf("unknown instruction. do NOP.\n");
 	}
 	
 	number_of_calls[instruction]++;

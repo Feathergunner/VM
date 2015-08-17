@@ -1,5 +1,5 @@
-#ifndef instructions
-#define instructions
+#ifndef instructions_vm
+#define instructions_vm
 
 #include <stdint.h>
 

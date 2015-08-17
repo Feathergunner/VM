@@ -9,6 +9,8 @@
 #include "ArithmeticalLogicalUnit.hpp"
 #include "Instructions_VM.hpp"
 
+#include "Constants.hpp"
+
 class ControlUnit
 {
 private:

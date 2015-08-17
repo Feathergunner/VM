@@ -23,7 +23,7 @@ int main()
 	*/
 	
 	// run:
-	vm->run();
+	vm->run(true);
 	// see memory:
 	vm->printRAM("ram.txt");
 	vm->print_statistics();

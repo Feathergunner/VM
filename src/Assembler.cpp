@@ -91,7 +91,7 @@ int Assembler::make_preprogram()
 			string var_name;
 			read_single_string_parameter(line_of_code, &var_name);
 			// add var:
-			int var_adress = 5 + 4*number_of_vars;
+			int var_adress = (1+BYTESIZE_OF_ADRESSSPACE)  + (BYTESIZE_OF_ADRESSSPACE*number_of_vars);
 			add_var(var_name, var_adress);
 			
 			//if (debug)
@@ -130,7 +130,7 @@ int Assembler::make_preprogram()
 				else
 					return 2;
 					
-				offset += 5;
+				offset += 1+BYTESIZE_OF_ADRESSSPACE;
 			}
 			
 			if (type == LDC)
@@ -148,7 +148,7 @@ int Assembler::make_preprogram()
 				else
 					return 2;
 					
-				offset += 5;
+				offset += 1+BYTESIZE_OF_ADRESSSPACE;
 			}
 			
 			if (type == MOV) 
@@ -166,7 +166,7 @@ int Assembler::make_preprogram()
 				else
 					return 2;
 			
-				offset += 9;
+				offset += 1 + 2*BYTESIZE_OF_ADRESSSPACE;
 			}	
 			
 			if (type == ADD || type == SUB || type == AND || type == BOR || type == MUL || type == DIV || type == SHL || type == SHR || type == LD0 || type == LDM || type == LD1 || type == RLA || type == RLB || type == NOP || type == STP)
@@ -212,7 +212,7 @@ int Assembler::make_preprogram()
 	
 	// length of header (initial jump + all vars)
 	// i.e. the basis for all precomputed adress-offsets:
-	length_of_header = 5 + 4*number_of_vars;
+	length_of_header = (1 + BYTESIZE_OF_ADRESSSPACE) + (BYTESIZE_OF_ADRESSSPACE*number_of_vars);
 
 	length_of_code = length_of_header + offset;
 	
@@ -231,9 +231,9 @@ void Assembler::update_jump_labels()
 void Assembler::make_eADD(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(ADD, offset));
 	offset += 1;
 }
@@ -241,9 +241,9 @@ void Assembler::make_eADD(string param1, string param2)
 void Assembler::make_eSUB(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(SUB, offset));
 	offset += 1;
 }
@@ -251,9 +251,9 @@ void Assembler::make_eSUB(string param1, string param2)
 void Assembler::make_eMUL(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(MUL, offset));
 	offset += 1;
 }
@@ -261,9 +261,9 @@ void Assembler::make_eMUL(string param1, string param2)
 void Assembler::make_eDIV(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
-	offset += 5;
+	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(DIV, offset));
 	offset += 1;
 }
@@ -340,7 +340,7 @@ int Assembler::make_program()
 		if (err == 0)
 		{
 			parse_int(value, &program[c]);
-			c += 4;
+			c += BYTESIZE_OF_ADRESSSPACE;
 		}
 		else if (err != -1)
 			return 1;
@@ -360,7 +360,7 @@ int Assembler::make_program()
 		if (err == 0)
 		{
 			parse_int(value, &program[c]);
-			c += 4;
+			c += BYTESIZE_OF_ADRESSSPACE;
 		}
 		else if (err != -1)
 			return 1;
@@ -380,9 +380,9 @@ void Assembler::parse_int(int param, uint8_t* destination)
 	}
 	
 	// write the int param byte-wise into byte-array destination
-	for (int i=0; i<4; i++)
+	for (int i=0; i<BYTESIZE_OF_ADRESSSPACE; i++)
 	{
-		uint8_t nextbyte = param>>(8*(3-i)) & 0x000000FF;
+		uint8_t nextbyte = param>>(8*(BYTESIZE_OF_ADRESSSPACE-1-i)) & 0x000000FF;
 		//if (debug)
 		//	printf("VAR: %i. byte = %i\n", i+1, nextbyte);
 		destination[i] = nextbyte;

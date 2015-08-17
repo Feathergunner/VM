@@ -12,6 +12,7 @@
 
 #include "Instructions_VM.hpp"
 #include "Instructions_ASM.hpp"
+#include "Constants.hpp"
 
 using namespace std;
 

@@ -10,7 +10,7 @@
 #include "ArithmeticalLogicalUnit.hpp"
 #include "CentralProcessingUnit.hpp"
 
-const int NUMBER_OF_INSTRUCTIONS = 16;
+#include "Constants.hpp"
 
 class VirtualMachine
 {

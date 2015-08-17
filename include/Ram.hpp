@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Constants.hpp"
+
 class Ram
 {
 private:
