@@ -228,6 +228,12 @@ void Assembler::update_jump_labels()
 		it->value += length_of_header;
 }
 
+/*
+---------------------------------------------------------------------------------------
+	UNROLL EXTENDED ASSEMBLER INSTRUCTIONS
+---------------------------------------------------------------------------------------
+*/
+
 void Assembler::make_eADD(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));

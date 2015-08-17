@@ -8,17 +8,36 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_
 	this->number_of_calls = number_of_calls;
 	
 	ic = 0;
+	cc = 0;
 }
 
-bool ControlUnit::next_cycle(bool debug)
+// method to execute the next cycle
+// debug:
+//	= 0	: no debug messages
+// 	= 1	: some messages
+//	= 2 : all messages
+bool ControlUnit::next_cycle(int debug)
 {
+	cc++;
+	
 	/*
 		FETCH instruction:
 	*/
-	// only consider lower 4 bits of instruction
-	int instruction = ram->get_byte(ic) & 0xFF;
+	int instruction = ram->get_byte(ic);
 	
-	if (debug)
+	if (debug == 1)
+	{
+		// print a status line depending on number of parameters:
+		if (instruction >= NUMBER_OF_INSTRUCTIONS)
+			printf("%10i | %10i || %10i *\n", cc, ic, instruction);
+		if (INSTRUCTION_PARAMCOUNT[instruction] == 0)
+			printf("%10i | %10i || %10s\n", cc, ic, ASM_SYMBOLS[instruction].c_str());
+		if (INSTRUCTION_PARAMCOUNT[instruction] == 1)
+			printf("%10i | %10i || %10s %10i\n", cc, ic, ASM_SYMBOLS[instruction].c_str(), 0);
+		if (INSTRUCTION_PARAMCOUNT[instruction] == 2)
+			printf("%10i | %10i || %10s %10i %10i\n", cc, ic, ASM_SYMBOLS[instruction].c_str(),0,0);	
+	}
+	if (debug == 2)
 		printf("IC at: %#X, read: %#X\n", ic, instruction);
 	
 	uint32_t dest, source, value;
@@ -44,7 +63,7 @@ bool ControlUnit::next_cycle(bool debug)
 			dest = ram->get_int(ic+1);
 			// set instruction counter:
 			ic = dest;
-			if (debug)
+			if (debug == 2)
 				printf("unconditional jump to %#X\n", dest);
 			break;
 			
@@ -56,11 +75,11 @@ bool ControlUnit::next_cycle(bool debug)
 				dest = ram->get_int(ic+1);
 				// set instruction counter:
 				ic = dest;
-				if (debug)
+				if (debug == 2)
 					printf("conditional jump to %#X\n", dest);
 			} else {
 				ic += 1+BYTESIZE_OF_ADRESSSPACE;
-				if (debug)
+				if (debug == 2)
 					printf("condition of jump not fulfilled\n");
 			}		
 			break;
@@ -72,11 +91,11 @@ bool ControlUnit::next_cycle(bool debug)
 				dest = ram->get_int(ic+1);
 				
 				ic = dest;
-				if (debug)
+				if (debug == 2)
 					printf("conditional jump to %#X\n", dest);
 			} else {
 				ic += 1+BYTESIZE_OF_ADRESSSPACE;
-				if (debug)
+				if (debug == 2)
 					printf("condition of jump not fulfilled\n");
 			}
 			break;
@@ -88,11 +107,11 @@ bool ControlUnit::next_cycle(bool debug)
 				dest = ram->get_int(ic+1);
 				
 				ic = dest;
-				if (debug)
+				if (debug == 2)
 					printf("conditional jump to %#X\n", dest);
 			} else {
 				ic += 1+BYTESIZE_OF_ADRESSSPACE;
-				if (debug)
+				if (debug == 2)
 					printf("conditional jump to %#X\n", dest);
 			}
 			
@@ -105,11 +124,11 @@ bool ControlUnit::next_cycle(bool debug)
 				dest = ram->get_int(ic+1);
 				
 				ic = dest;
-				if (debug)
+				if (debug == 2)
 					printf("conditional jump to %#X\n", dest);
 			} else {
 				ic += 1+BYTESIZE_OF_ADRESSSPACE;
-				if (debug)
+				if (debug == 2)
 					printf("conditional jump to %#X\n", dest);
 			}
 			
@@ -125,7 +144,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("add\n");
 			break;
 			
@@ -134,7 +153,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("sub\n");
 			break;
 			
@@ -143,7 +162,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("mul\n");
 				
 			break;
@@ -153,7 +172,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("div\n");
 				
 			break;
@@ -163,7 +182,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("and\n");
 			break;
 						
@@ -172,7 +191,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("or\n");
 			break;
 			
@@ -181,7 +200,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("shift_l\n");
 			break;
 		case SHR:
@@ -189,7 +208,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("shift_r\n");
 			break;
 			
@@ -207,7 +226,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write %i from ram[%i] to reg_A\n", value, source);
 			break;
 			
@@ -220,7 +239,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write %i from ram[%i] to reg_B\n", value, source);
 			break;
 			
@@ -232,7 +251,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write %i to reg_A\n", value);
 			break;
 			
@@ -242,7 +261,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write 0 to reg_B\n");
 			break;
 			
@@ -252,7 +271,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write C to A\n");
 				
 			break;
@@ -263,7 +282,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write C to B\n");
 				
 			break;
@@ -274,7 +293,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write max to reg_B\n");
 			break;
 			
@@ -284,7 +303,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic++;
 			
-			if (debug)
+			if (debug == 2)
 				printf("write 1 to reg_B\n");
 			break;
 			
@@ -298,7 +317,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic += 1+BYTESIZE_OF_ADRESSSPACE;
 			
-			if (debug)
+			if (debug == 2)
 				printf("store %i (from reg_C) to ram[%i]\n", value, dest);
 			break;
 			
@@ -312,14 +331,14 @@ bool ControlUnit::next_cycle(bool debug)
 			
 			ic += 1 + 2*BYTESIZE_OF_ADRESSSPACE;
 			
-			if (debug)
+			if (debug == 2)
 				printf("move data in ram from %i to %i\n", source, dest);
 			break;
 			
 		case NOP:
 			// no operation
 			ic++;
-			if (debug)
+			if (debug == 2)
 				printf("NOP\n");
 			break;
 			
@@ -331,13 +350,30 @@ bool ControlUnit::next_cycle(bool debug)
 		default:
 			// NOP
 			ic++;
-			if (debug)
+			if (debug == 2)
 				printf("unknown instruction. do NOP.\n");
 	}
 	
 	number_of_calls[instruction]++;
-	if (debug)
+	if (debug == 2)
 		printf("\ncontrol unit cycle finished\n");
 	
 	return true;
 }
+
+/*
+void ControlUnit::print_debug()
+{
+
+}
+
+void ControlUnit::print_debug(uint32_t p1)
+{
+
+}
+
+void ControlUnit::print_debug(uint32_t p1, uint32_t p2)
+{
+
+}
+*/

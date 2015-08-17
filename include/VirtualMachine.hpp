@@ -35,7 +35,7 @@ public:
 	// print ram
 	void printRAM(const char* filename);
 	// start:
-	void run(bool debug = false);
+	void run(int debug = 0);
 	
 	void print_statistics();
 	

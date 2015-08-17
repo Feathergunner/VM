@@ -2,14 +2,14 @@
 #define constants
 
 #include <stdint.h>
-#include <string.h>
+#include <string>
 #include <vector>
 
 // size of adresses in byte:
 const uint8_t BYTESIZE_OF_ADRESSSPACE = 2;
 
 // upper bound to number of instructions:
-const uint8_t NUMBER_OF_INSTRUCTIONS = 64;
+const uint8_t NUMBER_OF_INSTRUCTIONS = 0x2F;
 
 // disassebmle
 const std::vector<std::string> ASM_SYMBOLS = {
@@ -62,6 +62,59 @@ const std::vector<std::string> ASM_SYMBOLS = {
 "STC",		// 0x2C
 	"NU",	// 0x2D
 	"NU",	// 0x2E
-	"NU",	// 0x2F
+	"NU"	// 0x2F
+};
+
+const std::vector<int> INSTRUCTION_PARAMCOUNT = {
+0,		// 0x00
+1,		// 0x01
+1,		// 0x02
+1,		// 0x03
+0,		// 0x04
+0,		// 0x05
+0,		// 0x06
+0,		// 0x07
+0,		// 0x08
+0,		// 0x09
+1,		// 0x0A
+1,		// 0x0B
+1,		// 0x0C
+0,		// 0x0D
+1,		// 0x0E
+2,		// 0x0F
+
+0,		// 0x10
+	0,	// 0x11
+1,		// 0x12
+1,		// 0x13
+1,		// 0x14
+1,		// 0x15
+	0,	// 0x16
+	0,	// 0x17
+	0,	// 0x18
+	0,	// 0x19
+0,		// 0x1A
+0,		// 0x1B
+0,		// 0x1C
+0,		// 0x1D
+	0,	// 0x1E
+	0,	// 0x1F
+
+	0,	// 0x20
+	0,	// 0x21
+	0,	// 0x22
+	0,	// 0x23
+2,		// 0x24
+2,		// 0x25
+	0,	// 0x26
+	0,	// 0x27
+2,		// 0x28
+2,		// 0x29
+	0,	// 0x2A
+	0,	// 0x2B
+2,		// 0x2C
+	0,	// 0x2D
+	0,	// 0x2E
+	0	// 0x2F
 };
 #endif

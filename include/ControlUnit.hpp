@@ -15,7 +15,9 @@ class ControlUnit
 {
 private:
 	// instruction counter:
-	uint16_t ic;
+	uint32_t ic;
+	// cycle counter:
+	uint32_t cc;
 	
 	// pointer to ram:
 	Ram* ram;
@@ -31,7 +33,7 @@ public:
 	~ControlUnit(){}
 	
 	// execute cycle:
-	bool next_cycle(bool debug = false);
+	bool next_cycle(int debug = 0);
 	
 	
 };

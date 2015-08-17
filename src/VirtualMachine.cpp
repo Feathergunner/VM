@@ -77,14 +77,19 @@ void VirtualMachine::load_program(uint8_t* program, int length)
 ----------------------------------------------------------------------------------------
 */
 
-void VirtualMachine::run(bool debug)
+// main method to start vm.
+// debug:
+//	= 0	: no debug messages
+// 	= 1	: some messages
+//	= 2 : all messages
+void VirtualMachine::run(int debug)
 {
 	printf("Starting Virtual Machine...\n");
 	cycles = 0;
 	while(cpu->next_cycle(debug))
 	{
 		cycles++;
-		if (debug)
+		if (debug == 2)
 			printf("Cycle finished\n");
 	}
 	printf("Machine terminated!\n");

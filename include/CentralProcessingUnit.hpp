@@ -22,7 +22,7 @@ public:
 	~CentralProcessingUnit(){}
 	
 	// execute cycle:
-	bool next_cycle(bool debug = false);
+	bool next_cycle(int debug = 0);
 };
 
 #endif
