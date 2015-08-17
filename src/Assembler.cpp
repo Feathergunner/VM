@@ -49,7 +49,7 @@ int Assembler::make_preprogram()
 	
 	// add initial jump to begin
 	string label_begin("BEGIN");
-	preprogram.push_back(Precode(0x1, length_of_code, label_begin));
+	preprogram.push_back(Precode(JMP, 0, label_begin));
 	number_of_commands++;
 	// length_of_code += 5;
 	
@@ -61,11 +61,11 @@ int Assembler::make_preprogram()
 	while(inputfile.good())
 	{
 		if (debug)
-			printf("\nVAR: line_of_code = %i %s\n", line_number, line_of_code);
+			printf("\nPRECODE: next line_of_code = \n\t%i %s\n", line_number, line_of_code);
 		
 		int type = classify_line(line_of_code);
 		if (debug)
-			printf("Var: type         = %i\n",type);
+			printf("PRECODE: type = \n\t %i\n",type);
 		
 		// check if error
 		if (type == 0x100)
@@ -79,6 +79,8 @@ int Assembler::make_preprogram()
 			string name_label;
 			read_single_string_parameter(line_of_code, &name_label);
 			add_label(name_label, offset);
+			//if (debug)
+			//	printf("PRECODE: added label %s at offset %i\n",name_label, offset);
 		}
 		
 		// var
@@ -86,16 +88,24 @@ int Assembler::make_preprogram()
 		{
 			// declaration of variable
 			// get name:
-			string name_var;
-			read_single_string_parameter(line_of_code, &name_var);
+			string var_name;
+			read_single_string_parameter(line_of_code, &var_name);
 			// add var:
-			add_var(name_var, 5 + 4*number_of_vars);
+			int var_adress = 5 + 4*number_of_vars;
+			add_var(var_name, var_adress);
+			
+			//if (debug)
+			//	printf("PRECODE: added var %s at adress %i\n", var_name, var_adress);
 			
 		}
 			
 		// begin-label
 		if (type == 0x104)
+		{
 			add_label(label_begin, offset);
+			if (debug)
+				printf("PRECODE: added BEGIN-Label at offset %i\n", offset);	
+		}
 			
 		if (type < 0x100)
 		{
@@ -112,7 +122,11 @@ int Assembler::make_preprogram()
 				err = read_single_string_parameter(line_of_code, &p1);
 				// if no error occured, set precode:
 				if (err == 0)
+				{
 					preprogram.push_back(Precode(type, offset, p1));
+					if (debug)
+						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);	
+				}
 				else
 					return 2;
 					
@@ -126,7 +140,11 @@ int Assembler::make_preprogram()
 				err = read_single_int_parameter(line_of_code, &val1);
 				// if no error occured, set precode:
 				if (err == 0)
+				{
 					preprogram.push_back(Precode(type, offset, val1));
+					if (debug)
+						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);
+				}
 				else
 					return 2;
 					
@@ -140,7 +158,11 @@ int Assembler::make_preprogram()
 				err = read_double_string_parameter(line_of_code, &p1, &p2);
 				// if no error occured, set precode:
 				if (err == 0)
+				{
 					preprogram.push_back(Precode(type, offset, p1, p2));
+					if (debug)
+						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);
+				}
 				else
 					return 2;
 			
@@ -151,6 +173,8 @@ int Assembler::make_preprogram()
 			{
 				// no parameters:
 				preprogram.push_back(Precode(type, offset));
+				if (debug)
+						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);
 				
 				offset += 1;
 			}
@@ -806,19 +830,22 @@ void Assembler::print_precode()
 		int adr = pc_iterator->address;
 		
 		// case no params:
-		if (code == 0x4 || code == 0x5 || code == 0x6 || code == 0x7 || code == 0x8 || code == 0x9 || code == 0xF || code == 0x0)
+		if (code == ADD || code == SUB || code == AND || code == BOR || code == SHL || code == SHR ||
+			code == LD0 || code == STP ||
+			code == NOP || code == MUL || code == DIV || code == RLA || code == RLB || code == LDM || code == LD1)
 			printf("%3i %i\n", adr, code);
 		
 		// case one string param:
-		if (code == 0x1 || code == 0x2 || code == 0x3 || code == 0xA || code == 0xB || code == 0xD || code == 0xE)
+		if (code == JMP || code == JGZ || code == JOF || code == JEZ || code == JNO ||
+			code == LDA || code == LDB || code == STR)
 			printf("%3i %i %s\n", adr, code, pc_iterator->param1.c_str());
 		
 		// case constant value:
-		if (code == 0xC)
+		if (code == LDC)
 			printf("%3i %i %i\n", adr, code, pc_iterator->val);
 			
 		// case MOV (two string params):
-		if (code == 0xE)
+		if (code == MOV)
 			printf("%3i %i %s %s\n", adr, code, pc_iterator->param1.c_str(),  pc_iterator->param2.c_str());
 	}
 	

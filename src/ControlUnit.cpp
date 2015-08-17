@@ -16,7 +16,7 @@ bool ControlUnit::next_cycle(bool debug)
 		FETCH instruction:
 	*/
 	// only consider lower 4 bits of instruction
-	int instruction = ram->get_byte(ic) & 0xF;
+	int instruction = ram->get_byte(ic) & 0xFF;
 	
 	if (debug)
 		printf("IC at: %#X, read: %#X\n", ic, instruction);
@@ -318,6 +318,7 @@ bool ControlUnit::next_cycle(bool debug)
 			
 		case NOP:
 			// no operation
+			ic++;
 			if (debug)
 				printf("NOP\n");
 			break;
