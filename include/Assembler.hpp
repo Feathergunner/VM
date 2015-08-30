@@ -106,6 +106,7 @@ private:
 	void make_eSUB(string param1, string param2);
 	void make_eMUL(string param1, string param2);
 	void make_eDIV(string param1, string param2);
+	void make_STC(int value, string var_name);
 	
 	// update precode jump-labels:
 	void update_jump_labels();
@@ -123,9 +124,15 @@ private:
 	int find_var_address(string name_var, int* address);
 	
 	// read parameters:
+	std::string::iterator init_param_read(string line_of_code);
+	int read_int_parameter(std::string::iterator* it, int* i_val);
+	int read_string_parameter(std::string::iterator* it, string* s_val);
+	/*
 	int read_single_string_parameter(string line_of_code, string* p1);
 	int read_double_string_parameter(string line_of_code, string* p1, string* p2);
 	int read_single_int_parameter(string line_of_code, int* v1);
+	int read_double_int_parameter(string line_of_code, int* v1, int* v2);
+	*/
 	
 	// write parameter to machine-code program:
 	void parse_int(int param, uint8_t* destination);
