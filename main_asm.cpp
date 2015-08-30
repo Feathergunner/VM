@@ -16,7 +16,7 @@ int main()
 	*/
 	
 	Assembler assm(filename_input, filename_output);
-	int err = assm.assemble(true);
+	int err = assm.assemble(1);
 	assm.print_precode();
 	assm.write_code();
 

@@ -64,6 +64,8 @@ bool ControlUnit::next_cycle(int debug)
 	*/
 	//int instruction = ram->get_byte(ic);
 	int instruction = ram->get_byte(ic);
+	if (debug > 1)
+		printf("\tread byte: %#2X\n", instruction);
 	source = -1;
 	dest = -1;
 	value = -1;
@@ -73,17 +75,16 @@ bool ControlUnit::next_cycle(int debug)
 	*/
 	if (instruction == STP)
 		return false;
-	if (instruction < 0x20)
-		(this->*func[instruction])();
-	else
-		func_NOP();
+	if (instruction >= 0x20)
+		instruction &= 0x1F;
+	(this->*func[instruction])();
 	
-	if (debug == 1)
+	if (debug > 0)
 		print_vm_status(instruction);
 	
 	number_of_calls[instruction]++;
 	
-	if (debug == 2)
+	if (debug > 1)
 		printf("\ncontrol unit cycle finished\n");
 	
 	return true;

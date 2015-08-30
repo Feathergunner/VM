@@ -38,8 +38,8 @@ int Assembler::make_preprogram()
 		2	: error while reading var
 	*/
 	
-	if (debug)
-		printf("\nFUNCTION: make_preprogram\n");
+	if (debug > 0)
+		printf("\n[FUNCTION: make_preprogram]\n");
 	
 	// set filestream:
 	inputfile.open(filename_input, ifstream::in);
@@ -60,12 +60,12 @@ int Assembler::make_preprogram()
 	
 	while(inputfile.good())
 	{
-		if (debug)
-			printf("\nPRECODE: next line_of_code = \n\t%i %s\n", line_number, line_of_code);
+		if (debug > 1)
+			printf("\n\tnext line_of_code = \n\t\t%i %s\n", line_number, line_of_code);
 		
 		int type = classify_line(line_of_code);
-		if (debug)
-			printf("PRECODE: type = \n\t %i\n",type);
+		if (debug > 1)
+			printf("\ttype = \n\t\t %i\n",type);
 		
 		// check if error
 		if (type == 0x100)
@@ -77,7 +77,7 @@ int Assembler::make_preprogram()
 			// add label to next position in memory
 			// get name:
 			string name_label;
-			std::string::iterator it = init_param_read(line_of_code);
+			std::string::iterator it = ((string)line_of_code).begin();
 			read_string_parameter(&it, &name_label);
 			//read_single_string_parameter(line_of_code, &name_label);
 			add_label(name_label, offset);
@@ -91,7 +91,7 @@ int Assembler::make_preprogram()
 			// declaration of variable
 			// get name:
 			string var_name;
-			std::string::iterator it = init_param_read(line_of_code);
+			std::string::iterator it = ((string)line_of_code).begin();
 			read_string_parameter(&it, &var_name);
 			// add var:
 			int var_adress = (1+BYTESIZE_OF_ADRESSSPACE)  + (BYTESIZE_OF_ADRESSSPACE*number_of_vars);
@@ -106,8 +106,8 @@ int Assembler::make_preprogram()
 		if (type == 0x104)
 		{
 			add_label(label_begin, offset);
-			if (debug)
-				printf("PRECODE: added BEGIN-Label at offset %i\n", offset);	
+			if (debug > 1)
+				printf("\tPRECODE: added BEGIN-Label at offset %i\n", offset);	
 		}
 			
 		if (type < 0x100)
@@ -122,14 +122,14 @@ int Assembler::make_preprogram()
 			{
 				// cases with variable-name or jump-label
 				// read one parameter:
-				std::string::iterator it = init_param_read(line_of_code);
+				std::string::iterator it = ((string)line_of_code).begin();
 				err = read_string_parameter(&it, &p1);
 				// if no error occured, set precode:
 				if (err == 0)
 				{
 					preprogram.push_back(Precode(type, offset, p1));
-					if (debug)
-						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);	
+					if (debug > 1)
+						printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", type, offset);	
 				}
 				else
 					return 2;
@@ -141,14 +141,14 @@ int Assembler::make_preprogram()
 			{
 				// case load_constant: read integer:
 				// read one integer parameter:
-				std::string::iterator it = init_param_read(line_of_code);
+				std::string::iterator it = ((string)line_of_code).begin();
 				err = read_int_parameter(&it, &val1);
 				// if no error occured, set precode:
 				if (err == 0)
 				{
 					preprogram.push_back(Precode(type, offset, val1));
-					if (debug)
-						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);
+					if (debug > 1)
+						printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", type, offset);	
 				}
 				else
 					return 2;
@@ -160,15 +160,15 @@ int Assembler::make_preprogram()
 			{
 				// case move: to variable-names
 				// read two parameters:
-				std::string::iterator it = init_param_read(line_of_code);
+				std::string::iterator it = ((string)line_of_code).begin();
 				err = read_string_parameter(&it, &p1);
 				err = read_string_parameter(&it, &p2);
 				// if no error occured, set precode:
 				if (err == 0)
 				{
 					preprogram.push_back(Precode(type, offset, p1, p2));
-					if (debug)
-						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);
+					if (debug > 1)
+						printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", type, offset);	
 				}
 				else
 					return 2;
@@ -180,8 +180,8 @@ int Assembler::make_preprogram()
 			{
 				// no parameters:
 				preprogram.push_back(Precode(type, offset));
-				if (debug)
-						printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", type, offset);
+				if (debug > 1)
+						printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", type, offset);	
 				
 				offset += 1;
 			}
@@ -190,7 +190,7 @@ int Assembler::make_preprogram()
 			if (type == EAD || type == ESU || type == EMU || type == EDI)
 			{
 				// get operands:
-				std::string::iterator it = init_param_read(line_of_code);
+				std::string::iterator it = ((string)line_of_code).begin();
 				err = read_string_parameter(&it, &p1);
 				err = read_string_parameter(&it, &p2);
 				if (err == 0)
@@ -212,7 +212,7 @@ int Assembler::make_preprogram()
 			
 			if (type == STC)
 			{
-				std::string::iterator it = init_param_read(line_of_code);
+				std::string::iterator it = ((string)line_of_code).begin();
 				err = read_int_parameter(&it, &val1);
 				err = read_string_parameter(&it, &p1);
 				//err = read_double_int_parameter(line_of_code, &val1, &val2);
@@ -242,6 +242,8 @@ int Assembler::make_preprogram()
 // update jump-labels after first iteration, when all adresses are known
 void Assembler::update_jump_labels()
 {
+	if (debug > 1)
+		printf("[FUNCTION: update_jump_labels]");
 	for (list<Pair>::iterator it = labels.begin(); it != labels.end(); it++)
 		it->value += length_of_header;
 }
@@ -255,56 +257,84 @@ void Assembler::update_jump_labels()
 void Assembler::make_eADD(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(ADD, offset));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", ADD, offset);	
 	offset += 1;
 }
 
 void Assembler::make_eSUB(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(SUB, offset));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", SUB, offset);	
 	offset += 1;
 }
 
 void Assembler::make_eMUL(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(MUL, offset));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", MUL, offset);	
 	offset += 1;
 }
 
 void Assembler::make_eDIV(string param1, string param2)
 {
 	preprogram.push_back(Precode(LDA, offset, param1));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LDB, offset, param2));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(DIV, offset));
+	if (debug > 1)
+		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", DIV, offset);	
 	offset += 1;
 }
 
 void Assembler::make_STC(int value, string var_name)
 {
 	preprogram.push_back(Precode(LDC, offset, value));
-	printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", LDC, offset);
+	if (debug > 1)
+		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", LDC, offset);
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 	preprogram.push_back(Precode(LD0, offset));
-	printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", LD0, offset);
+	if (debug > 1)
+		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", LD0, offset);
 	offset += 1;
 	preprogram.push_back(Precode(ADD, offset));
-	printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", ADD, offset);
+	if (debug > 1)
+		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", ADD, offset);
 	offset += 1;
 	preprogram.push_back(Precode(STR, offset, var_name));
-	printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", STR, offset);
+	if (debug > 1)
+		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", STR, offset);
 	offset += 1+BYTESIZE_OF_ADRESSSPACE;
 }
 
@@ -312,11 +342,10 @@ void Assembler::make_STC(int value, string var_name)
 //	- insert correct addresses for variables and jump-addresses
 int Assembler::make_program()
 {	
-	if (debug)
-	{
-		printf("\nFUNCTION: make_program\n");
+	if (debug > 0)
+		printf("\n[FUNCTION: make_program]\n");
+	if (debug > 1)
 		printf("\tinitialize %i bytes for program\n",length_of_code);
-	}
 	
 	// create byte-array for program:
 	program = (uint8_t*)malloc(length_of_code);
@@ -328,7 +357,7 @@ int Assembler::make_program()
 	// iterate through preprogram:
 	for (list<Precode>::iterator pc_iterator = preprogram.begin(); pc_iterator != preprogram.end(); pc_iterator++)
 	{
-		if (debug)
+		if (debug > 1)
 			printf("STATUS: reading next precode\n");
 			
 		// get current code:
@@ -344,7 +373,7 @@ int Assembler::make_program()
 			program[pc_iterator->address] = code;
 			c = pc_iterator->address+ 1;
 		}
-		if (debug)
+		if (debug > 1)
 			printf("VAR: code at byte %i: %i\n",pc_iterator->address,code);
 		
 		//check if current command is command with parameters and add them to program:
@@ -353,7 +382,7 @@ int Assembler::make_program()
 		// case jump-label:
 		if (code == JMP || code == JGZ || code == JOF || code == JEZ || code == JNO)
 		{
-			if (debug)
+			if (debug > 1)
 				printf("CASE: jump - get address\n");
 			err = find_label_address(pc_iterator->param1, &value);
 		}
@@ -361,7 +390,7 @@ int Assembler::make_program()
 		// case var-name:
 		if (code == LDA || code == LDB || code == STR || code == MOV)
 		{
-			if (debug)
+			if (debug > 1)
 				printf("CASE: variable - get address\n");
 			err = find_var_address(pc_iterator->param1, &value);
 		}
@@ -369,7 +398,7 @@ int Assembler::make_program()
 		// case constant value:
 		if (code == LDC)
 		{
-			if (debug)
+			if (debug > 1)
 				printf("Case: constant value\n");
 			value = pc_iterator->val;
 			// set err to 0 to flag for parsing:
@@ -391,7 +420,7 @@ int Assembler::make_program()
 		// case MOV:
 		if (code == MOV)
 		{
-			if (debug)
+			if (debug > 1)
 				printf("Case: move - get second address\n");
 			err = find_var_address(pc_iterator->param2, &value);
 		}
@@ -413,9 +442,9 @@ int Assembler::make_program()
 void Assembler::parse_int(int param, uint8_t* destination)
 {
 	
-	if (debug)
+	if (debug > 1)
 	{
-		printf("\tFUNCTION: parse_int\n");
+		printf("[FUNCTION: parse_int]\n");
 		printf("\t\tVAR: value = %i\n",param);
 	}
 	
@@ -480,8 +509,8 @@ int Assembler::classify_line(string line_of_code)
 		0x104	: BEG	(begin-label)
 	*/
 	
-	if (debug)
-		printf("FUNCTION: classify_line\n");
+	if (debug > 1)
+		printf("[FUNCTION: classify_line]\n");
 	
 	char cmd[3];
 	string::iterator it = line_of_code.begin();
@@ -631,25 +660,6 @@ int Assembler::classify_line(string line_of_code)
 	return 0x100;
 }
 
-std::string::iterator Assembler::init_param_read(string line_of_code)
-{
-	if (debug)
-		printf("FUNCTION: init_param_read\n");
-	
-	
-	std::string::iterator it = line_of_code.begin();	
-	/*
-	// cut off command and following spaces:
-	while(*it != ' ')
-		it++;
-    it++;
-	while(*it == ' ')
-		it++;
-	*/
-	
-	return it;
-}
-
 int Assembler::read_int_parameter(std::string::iterator* it, int* i_val)
 {
 	// cut off command and following spaces:
@@ -659,8 +669,8 @@ int Assembler::read_int_parameter(std::string::iterator* it, int* i_val)
 	while(*(*it) == ' ')
 		(*it)++;
 		
-	if (debug)
-		printf("FUNCTION: read_int_parameter\n");
+	if (debug > 1)
+		printf("[FUNCTION: read_int_parameter]\n");
 	int value = 0;
 	while ((int)*(*it) >= 0x30 && (int)*(*it) < 0x3A)
 	{
@@ -668,7 +678,7 @@ int Assembler::read_int_parameter(std::string::iterator* it, int* i_val)
 		value +=(int)*(*it) - 0x30;
 		(*it)++;
 	}
-	if (debug)
+	if (debug > 1)
 		printf("\tvalue is: %i\n",value);
 	*i_val = value;
 	
@@ -684,8 +694,8 @@ int Assembler::read_string_parameter(std::string::iterator* it, string* s_val)
 	while(*(*it) == ' ')
 		(*it)++;
 		
-	if (debug)
-		printf("FUNCTION: read_string_parameter\n");
+	if (debug > 1)
+		printf("[FUNCTION: read_string_parameter]\n");
 	// read at most 10 chars or until non-letter is found:
 	int rsize = 10;
     char res[rsize+1];
@@ -698,198 +708,40 @@ int Assembler::read_string_parameter(std::string::iterator* it, string* s_val)
     }
 
     string sres(res,pos);
-	if (debug)
+	if (debug > 1)
 		printf("\tstring is: %s\n",sres.c_str());
 	*s_val = sres;
 	
 	return 0;
 }
-	
-/*
-int Assembler::read_single_string_parameter(string line_of_code, string* p1)
-{
-	if (debug)
-		printf("FUNCTION: read_single_string_parameter\n");
-
-    int rsize = 10;
-    char res[rsize+1];
-	std::string::iterator it = line_of_code.begin();
-	
-	// cut off command and following spaces:
-	while(*it != ' ')
-		it++;
-    it++;
-	while(*it == ' ')
-		it++;
-
-	// read at most 10 chars or until non-letter is found:
-    int pos = 0;
-	while(pos <= rsize && (((int)*it > 0x40 && (int)*it < 0x5B) || ((int)*it > 0x60 && (int)*it < 0x7B)))
-    {
-        res[pos] = *it;
-        pos++;
-        it++;
-    }
-
-    string sres(res,pos);
-	if (debug)
-		printf("\tstring is: %s\n",sres.c_str());
-	*p1 = sres;
-	
-	return 0;
-}
-
-int Assembler::read_double_string_parameter(string line_of_code, string* p1, string* p2)
-{
-	if (debug)
-		printf("FUNCTION: read_double_string_parameter\n");
-    int rsize = 10;
-    char res[rsize+1];
-    int pos;
-	std::string::iterator it = line_of_code.begin();
-	
-	// cut off command and following spaces:
-	while(*it != ' ')
-		it++;
-	
-	while(*it == ' ')
-		it++;
-
-	// read at most 10 chars or until non-letter is found:
-	pos = 0;
-	while(pos <= rsize && (((int)*it > 0x40 && (int)*it < 0x5B) || ((int)*it > 0x60 && (int)*it < 0x7B)))
-    {
-        res[pos] = *it;
-        pos++;
-        it++;
-    }
-    string sres1(res,pos);
-	
-	// move forward until next parameter starts:
-	while(*it !=' ')
-		it++;
-	
-	while(*it == ' ')
-		it++;
-		
-	// read at most 10 chars or until non-letter is found:
-    pos = 0;
-	while(pos <= rsize && (((int)*it > 0x40 && (int)*it < 0x5B) || ((int)*it > 0x60 && (int)*it < 0x7B)))
-    {
-        res[pos] = *it;
-        pos++;
-        it++;
-    }
-	
-	string sres2(res,pos);
-	if (debug)
-		printf("\tstring 1 is: %s\n\tstring 2 is: %s\n",sres1.c_str(), sres2.c_str());
-	*p1 = sres1;
-	*p2 = sres2;
-	
-	return 0;
-}
-
-
-int Assembler::read_single_int_parameter(string line_of_code, int* v1)
-{
-	if (debug)
-		printf("FUNCTION: read_single_int_parameter\n");
-	int value = 0;
-	std::string::iterator it = line_of_code.begin();
-	
-	// cut off command and following ':' and spaces:
-	while(*it != ' ')
-		it++;
-	
-	while(*it == ' ')
-		it++;
-	
-	while ((int)*it >= 0x30 && (int)*it < 0x3A)
-	{
-		value *= 10;
-		value +=(int)*it - 0x30;
-		it++;
-	}
-	if (debug)
-		printf("\tvalue is: %i\n",value);
-	*v1 = value;
-	
-	return 0;
-}
-
-int Assembler::read_double_int_parameter(string line_of_code, int* v1, int* v2)
-{
-	if (debug)
-		printf("FUNCTION: read_single_int_parameter\n");
-	int value = 0;
-	std::string::iterator it = line_of_code.begin();
-	
-	// cut off command and following ':' and spaces:
-	while(*it != ' ')
-		it++;
-	
-	while(*it == ' ')
-		it++;
-	
-	while ((int)*it >= 0x30 && (int)*it < 0x3A)
-	{
-		value *= 10;
-		value +=(int)*it - 0x30;
-		it++;
-	}
-	if (debug)
-		printf("\tvalue 1 is: %i\n",value);
-	*v1 = value;
-	
-	// move forward until next parameter starts:
-	while(*it !=' ')
-		it++;
-	
-	while(*it == ' ')
-		it++;
-		
-	while ((int)*it >= 0x30 && (int)*it < 0x3A)
-	{
-		value *= 10;
-		value +=(int)*it - 0x30;
-		it++;
-	}
-	if (debug)
-		printf("\tvalue 2 is: %i\n",value);
-	*v2 = value;
-	
-	return 0;
-}
-*/
 
 void Assembler::add_label(string name_label, int address)
 {
-	if (debug)
-		printf("FUNCTION: add_label\n\tlabel : %s, adress = %i\n", name_label.c_str(), address);
+	if (debug > 1)
+		printf("[FUNCTION: add_label]\n\tlabel : %s, adress = %i\n", name_label.c_str(), address);
 	labels.push_back(Pair(name_label, address));
 	number_of_labels++;
 }
 
 void Assembler::add_var(string name_var, int address)
 {
-	if (debug)
-		printf("FUNCTION: add_var\n\tvar : %s, adress = %i\n", name_var.c_str(), address);
+	if (debug > 1)
+		printf("[FUNCTION: add_var]\n\tvar : %s, adress = %i\n", name_var.c_str(), address);
 	variables.push_back(Pair(name_var, address));
 	number_of_vars++;
 }
 
 int Assembler::find_label_address(string name_label, int* address)
 {
-	if (debug)
-		printf("FUNCTION: find_label_address\n");
+	if (debug > 1)
+		printf("[FUNCTION: find_label_address]\n");
 	// iterate through label-list until name is found, return address
 	for (list<Pair>::iterator label_iterator = labels.begin(); label_iterator != labels.end(); label_iterator++)
 	{
 		if (label_iterator->name.compare(name_label) == 0)
 		{
 			*address = label_iterator->value;
-			if (debug)
+			if (debug > 1 )
 				printf("\t label: %s, address: %i\n", name_label.c_str(), *address);
 			return 0;
 		}			
@@ -900,15 +752,15 @@ int Assembler::find_label_address(string name_label, int* address)
 
 int Assembler::find_var_address(string name_var, int* address)
 {
-	if (debug)
-		printf("FUNCTION: find_var_address\n");
+	if (debug > 1)
+		printf("[FUNCTION: find_var_address]\n");
 	// iterate through variable-list until name is found, return address
 	for (list<Pair>::iterator var_iterator = variables.begin(); var_iterator != variables.end(); var_iterator++)
 	{
 		if (var_iterator->name.compare(name_var) == 0)
 		{
 			*address = var_iterator->value;
-			if (debug)
+			if (debug > 1)
 				printf("\t var: %s, address: %i\n", name_var.c_str(), *address);
 			return 0;
 		}			
@@ -918,7 +770,7 @@ int Assembler::find_var_address(string name_var, int* address)
 }
 
 
-int Assembler::assemble(bool debug)
+int Assembler::assemble(int debug)
 {
 	// makes machine-code from read Assemblercode
 	// returns 0 if successful, otherwise error-code:
@@ -927,9 +779,9 @@ int Assembler::assemble(bool debug)
 		2	: error while parsing parameter
 		3	: label or name not found
 	*/
-	if (debug)
+	if (debug > 1)
 	{
-		printf("FUNCTION: assemble\n");
+		printf("[FUNCTION: assemble]\n");
 		printf("VAR: filename_input = %s\n", filename_input);
 	}
 	
@@ -939,13 +791,13 @@ int Assembler::assemble(bool debug)
 	
 	err = make_preprogram();
 	
-	if (debug)
+	if (debug > 1)
 		printf("FINISHED make_preprogram\n\tERR = %i\n\n",err);
 	
 	if (err == 0)
 	{
 		err = make_program();
-		if (debug)
+		if (debug > 1)
 			printf("FINISHED make_program\n\tERR = %i\n\n",err);
 		if (err != 0)
 			return err + 1;
@@ -965,8 +817,8 @@ int Assembler::assemble(bool debug)
 void Assembler::write_code()
 {
 	
-	if (debug)
-		printf("FUNCTION: write_code\n");
+	if (debug > 1)
+		printf("[FUNCTION: write_code]\n");
 		
 	FILE *f = fopen(filename_output, "w");
 	if (f == NULL)
