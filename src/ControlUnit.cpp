@@ -20,8 +20,8 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_
 	func[0x05] = &ControlUnit::func_SUB;
 	func[0x06] = &ControlUnit::func_AND;
 	func[0x07] = &ControlUnit::func_BOR;
-	func[0x08] = &ControlUnit::func_SHR;
-	func[0x09] = &ControlUnit::func_SHL;
+	func[0x08] = &ControlUnit::func_SHL;
+	func[0x09] = &ControlUnit::func_SHR;
 	func[0x0A] = &ControlUnit::func_LDA;
 	func[0x0B] = &ControlUnit::func_LDB;
 	func[0x0C] = &ControlUnit::func_LDC;

@@ -35,7 +35,7 @@ VirtualMachine::~VirtualMachine()
 // reads machine-code program from file given by filename and writes it into RAM,
 // beginning at position 0
 // file has to start with integer giving the byte-length of the program
-void VirtualMachine::load_program_from_file(const char* filename, bool debug)
+void VirtualMachine::load_program_from_file(const char* filename, int debug)
 {
 	FILE* program;
 	
@@ -48,16 +48,16 @@ void VirtualMachine::load_program_from_file(const char* filename, bool debug)
 		int length;
 		int size;
 		fscanf(program, "%i ", &length);
-	
-		printf("length is: %i\n\n", length);
+		if (debug > 1)
+			printf("length is: %i\n\n", length);
 		size = length;
 		
 		for (int i=0; i<size; i++)
 		{
 			fscanf(program, "%hhx ", &byte);
 			ram->store_byte(byte, i);
-			if (debug)
-				printf("%3i: %#04x\t %#04x\n", i, byte, ram->get_byte(i));
+			if (debug > 1)
+				printf("ram[%3i]=\t %#04x\n", i, ram->get_byte(i));
 		}
 	}
 	else

@@ -2,10 +2,12 @@
 
 int main()
 {
-	///*
+	const char* filename_input = "Prim.txt";
+	const char* filename_output = "mc_Prim.txt";
+	/*
 	const char* filename_input = "asm_test.txt";
 	const char* filename_output = "mc_test.txt";
-	//*/
+	*/
 	/*
 	const char* filename_input = "asm_multiply_test.txt";
 	const char* filename_output = "mc_multiply_test.txt";

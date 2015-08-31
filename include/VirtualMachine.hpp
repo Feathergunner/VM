@@ -30,7 +30,7 @@ public:
 	~VirtualMachine();
 	
 	// init:
-	void load_program_from_file(const char* filename, bool debug = false);
+	void load_program_from_file(const char* filename, int debug);
 	void load_program(uint8_t* program, int length);
 	// print ram
 	void printRAM(const char* filename);

@@ -1,0 +1,44 @@
+// a test program that checkes if the value in test is prim
+// writes 1 to res if test is prim
+// writes 0 to res otherwise
+VAR test
+VAR max
+VAR counter
+VAR res
+BEGIN
+STC 47 test
+STC 2 counter
+LDA test
+SHR
+// max = test/2, maximum number that needs to be checked
+STR max
+LABEL start
+// check if test/counter has remainder:
+LDA test
+LDB counter
+DIV
+RLA
+MUL
+RLA
+LDB test
+SUB
+// if 0, no remainder: test is not prim
+JEZ notprim
+// otherwise increase counter
+LDA counter
+LD1
+ADD
+STR counter
+RLB
+// check if max is reached:
+LDA max
+SUB
+// counter < max: goto start
+JGZ start
+// otherwise: test is prim
+STC 1 res
+JMP end
+LABEL notprim
+STC 0 res
+LABEL end
+STP
