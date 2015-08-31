@@ -5,7 +5,7 @@
 
 int main()
 {
-	VirtualMachine* vm = new VirtualMachine(300);
+	VirtualMachine* vm = new VirtualMachine(50);
 	
 	// load a program:
 	//vm->load_program_from_file("mc_test.txt");
@@ -13,11 +13,11 @@ int main()
 	///*
 	// create random program:
 	uint8_t* randprog;
-	int progsize = 256;
+	int progsize = 30;
 	randprog = (uint8_t*)malloc(progsize);
 	srand(time(NULL));
 	for (int i=0; i<progsize; i++)
-		randprog[i] = rand() % 256;
+		randprog[i] = rand() % NUMBER_OF_INSTRUCTIONS;
 	vm->load_program(randprog, progsize);
 	vm->printRAM("before.txt");
 	//*/
@@ -32,7 +32,7 @@ int main()
 	
 	if (debug > 0)
 		vm->printRAM("ram.txt");
-	if (debug > 1)
-		vm->print_statistics();
+	//if (debug > 1)
+	//	vm->print_statistics();
 	return 0;
 }

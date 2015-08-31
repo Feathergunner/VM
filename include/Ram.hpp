@@ -13,8 +13,7 @@ class Ram
 private:
 	uint8_t* memory;
 	uint32_t size;
-
-	uint32_t check_address(uint32_t address);
+	
 public:
 	// constructor:
 	Ram(uint32_t size);
@@ -22,7 +21,11 @@ public:
 	// destructor:
 	~Ram();
 	
+	uint32_t get_ramsize();
+	
 	// get data:
+	uint32_t check_address(uint32_t address);
+	
 	uint8_t get_byte(uint32_t address);
 	uint32_t get_int(uint32_t address);
 	

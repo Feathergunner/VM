@@ -15,6 +15,7 @@ class ControlUnit
 {
 private:
 	// instruction counter:
+	uint32_t old_ic;
 	uint32_t ic;
 	// cycle counter:
 	uint32_t cc;

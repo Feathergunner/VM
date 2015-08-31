@@ -88,8 +88,8 @@ void VirtualMachine::run(int debug)
 	cycles = 0;
 	if (debug == 1)
 	{
-		printf("%8s | %8s | %5s %12s %12s %12s\n", "cycle", "ic", "instr", "src", "dest", "val");
-		printf("---------|----------|---------------------------------------------\n");
+		printf("%8s | %8s | %5s %12s %12s %12s | %5s\n", "cycle", "ic", "instr", "src", "dest", "val", "FLAGS");
+		printf("---------|----------|----------------------------------------------|-------\n");
 	}
 	while(cpu->next_cycle(debug))
 	{

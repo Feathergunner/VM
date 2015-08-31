@@ -59,6 +59,8 @@ bool ControlUnit::next_cycle(int debug)
 	
 	cc++;
 	
+	old_ic = ram->check_address(ic);
+	
 	/*
 		FETCH instruction:
 	*/
@@ -73,10 +75,16 @@ bool ControlUnit::next_cycle(int debug)
 	/*
 		DECODE instruction:
 	*/
-	if (instruction == STP)
-		return false;
-	if (instruction >= 0x20)
+	
+	if (instruction > 0x1F)
 		instruction &= 0x1F;
+		
+	if (instruction == STP)
+	{
+		print_vm_status(instruction);
+		return false;
+	}
+	
 	(this->*func[instruction])();
 	
 	if (debug > 0)
@@ -404,14 +412,17 @@ void ControlUnit::func_LDM()
 
 void ControlUnit::print_vm_status(int instr)
 {
-	printf("%8i | %8i | %5s ", cc, ic, ASM_SYMBOLS[instr].c_str());
+	// Instruction:
+	printf("%8i | %8i | %5s ", cc, old_ic, ASM_SYMBOLS[instr].c_str());
+	
+	// Adresses & Values:
 	if (source != 0xFFFFFFFF)
-		printf("%#12X ", source);
+		printf("%#12X ", ram->check_address(source));
 	else
 		printf("%12s ", "-");
 	
 	if (dest != 0xFFFFFFFF)
-		printf("%#12X ", dest);
+		printf("%#12X ", ram->check_address(dest));
 	else
 		printf("%12s ", "-");
 		
@@ -419,6 +430,30 @@ void ControlUnit::print_vm_status(int instr)
 		printf("%#12X ", value);
 	else
 		printf("%12s ", "-");
+		
+	printf("| ");
+		
+	// Flags:
+	if (alu->isZero())
+		printf("Z");
+	else
+		printf("-");
+		
+	if (alu->isGreaterZero())
+		printf("G");
+	else
+		printf("-");
+		
+	if (alu->isOverflow())
+		printf("O");
+	else
+		printf("-");
+		
+	if (alu->isDivideByZero())
+		printf("D");
+	else
+		printf("-");
+	
 		
 	printf("\n");
 		

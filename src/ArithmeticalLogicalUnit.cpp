@@ -40,6 +40,11 @@ bool ArithmeticalLogicalUnit::isOverflow()
 	return flag_overflow;
 }
 
+bool ArithmeticalLogicalUnit::isDivideByZero()
+{
+	return flag_dividebyZero;
+}
+
 /*
 ----------------------------------------------------------------------------------------------
 	ARITHMETIC OPERATIONS: 
@@ -68,9 +73,14 @@ void ArithmeticalLogicalUnit::op_mul()
 
 void ArithmeticalLogicalUnit:: op_div()
 {
-	reg_C = reg_A / reg_B;
-	setZeroFlags();
-	flag_overflow = false;
+	if (reg_B != 0)
+	{
+		reg_C = reg_A / reg_B;
+		setZeroFlags();
+		flag_overflow = false;
+	} else {
+		flag_dividebyZero = true;
+	}		
 }
 
 void ArithmeticalLogicalUnit::op_and()
@@ -119,6 +129,9 @@ void ArithmeticalLogicalUnit::setZeroFlags()
 		flag_greaterZero = true;
 	else
 		flag_greaterZero = false;
+		
+	// reset dividebyZero-flag:
+	flag_dividebyZero = false;
 }
 
 void ArithmeticalLogicalUnit::setOverFlowFlag_Add()

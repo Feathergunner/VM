@@ -19,6 +19,11 @@ Ram::~Ram()
 	free(memory);
 }
 
+uint32_t Ram::get_ramsize()
+{
+	return size;
+}
+
 // check if address is within address-space. otherwise take module
 // realizes circular organized memory
 uint32_t Ram::check_address(uint32_t address)
@@ -69,7 +74,7 @@ uint32_t Ram::get_int(uint32_t address)
 void Ram::store_byte(uint8_t data, uint32_t address)
 {
 	memory[check_address(address)] = data;
-	memory[address] = data;
+	//memory[address] = data;
 }
 
 // writes 32 bit to address

@@ -16,6 +16,7 @@ private:
 	bool flag_zero;
 	bool flag_greaterZero;
 	bool flag_overflow;
+	bool flag_dividebyZero;
 	
 	void setZeroFlags();
 	void setOverFlowFlag_Add();
@@ -37,6 +38,7 @@ public:
 	bool isZero();
 	bool isGreaterZero();
 	bool isOverflow();
+	bool isDivideByZero();
 	
 	// arithmetical and logical operations:
 	// S-RISC:
