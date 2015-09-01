@@ -8,10 +8,12 @@ int main()
 	// change this to set the amount of debugging info
 	// 0 will display almost nothing
 	// 1 will display status in each cycle and save ram after termination to ram.txt
-	// 2 will display additional informations while executing vm
-	int debug = 1;
+	// 2 will display all of the above, plus a statistic of executed instruction
+	// 3 will display all of the above, plus additional description during execution
+	int debug = 2;
+	int sizeofram = 200;
 	
-	VirtualMachine* vm = new VirtualMachine(200);
+	VirtualMachine* vm = new VirtualMachine(sizeofram);
 	
 	// use one of the following options:
 	// 1) load program from file
@@ -19,8 +21,6 @@ int main()
 	
 	// 1) load a program:
 	vm->load_program_from_file("mc_Prim.txt", debug);
-	if (debug > 1)
-		vm->printRAM("before.txt");
 	
 	/*
 	// 2) create random program:
@@ -31,14 +31,14 @@ int main()
 	for (int i=0; i<progsize; i++)
 		randprog[i] = rand() % NUMBER_OF_INSTRUCTIONS;
 	vm->load_program(randprog, progsize);
-	vm->printRAM("before.txt");
 	*/
+	
+	if (debug > 2)
+		vm->printRAM("before.txt");
 	
 	vm->run(debug);
 	
 	if (debug > 0)
 		vm->printRAM("ram.txt");
-	if (debug > 1)
-		vm->print_statistics();
 	return 0;
 }

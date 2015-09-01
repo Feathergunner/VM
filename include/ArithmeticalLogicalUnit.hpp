@@ -52,6 +52,10 @@ public:
 	// RISC:
 	void op_mul();
 	void op_div();
+	
+	// DEBUG:
+	uint32_t getA();
+	uint32_t getB();
 };
 
 #endif

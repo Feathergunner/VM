@@ -8,8 +8,11 @@
 // size of adresses in byte:
 const uint8_t BYTESIZE_OF_ADRESSSPACE = 2;
 
-// upper bound to number of instructions:
+// upper bound to number of instructions (ASM):
 const uint8_t NUMBER_OF_INSTRUCTIONS = 0x2F;
+
+// upper bound to number of instructions (VM):
+const uint8_t NUMBER_OF_INSTRUCTIONS_VM = 0x1F;
 
 // disassemble
 // "NU" stands for "not used" and is mapped to NOP by the vm

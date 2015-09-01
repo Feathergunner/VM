@@ -25,6 +25,16 @@ uint32_t ArithmeticalLogicalUnit::getC()
 	return reg_C;
 }
 
+uint32_t ArithmeticalLogicalUnit::getA()
+{
+	return reg_A;
+}
+
+uint32_t ArithmeticalLogicalUnit::getB()
+{
+	return reg_B;
+}
+
 bool ArithmeticalLogicalUnit::isZero()
 {
 	return flag_zero;

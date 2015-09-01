@@ -55,33 +55,39 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_
 //	= 2 : all messages
 bool ControlUnit::next_cycle(int debug)
 {
+	/*
+		INIT:
+	*/
 	this->debug = debug;
 	
 	cc++;
 	
 	old_ic = ram->check_address(ic);
 	
-	/*
-		FETCH instruction:
-	*/
-	//int instruction = ram->get_byte(ic);
-	int instruction = ram->get_byte(ic);
-	if (debug > 1)
-		printf("\tread byte: %#2X\n", instruction);
 	source = -1;
 	dest = -1;
 	value = -1;
 	
 	/*
+		FETCH instruction:
+	*/
+	int instruction = (ram->get_byte(ic)) & 0x1F;
+	
+	number_of_calls[instruction]++;
+	
+	if (debug > 2)
+		printf("\tread byte: %#2X\n", instruction);
+	
+	/*
 		DECODE instruction:
 	*/
-	
-	if (instruction > 0x1F)
-		instruction &= 0x1F;
 		
 	if (instruction == STP)
 	{
-		print_vm_status(instruction);
+		if (debug > 0)
+			print_vm_status(instruction);
+		if (debug > 2)
+			printf("\ncontrol unit cycle finished\n");
 		return false;
 	}
 	
@@ -90,9 +96,7 @@ bool ControlUnit::next_cycle(int debug)
 	if (debug > 0)
 		print_vm_status(instruction);
 	
-	number_of_calls[instruction]++;
-	
-	if (debug > 1)
+	if (debug > 2)
 		printf("\ncontrol unit cycle finished\n");
 	
 	return true;
@@ -115,7 +119,7 @@ void ControlUnit::func_JMP()
 	dest = ram->get_int(ic+1);
 	ic = dest;
 	
-	if (debug == 2)
+	if (debug > 2)
 		printf("unconditional jump to %#X\n", ic);
 }
 
@@ -128,12 +132,12 @@ void ControlUnit::func_JGZ()
 	{
 		ic = dest;
 		
-		if (debug == 2)
+		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
 		ic += 1+BYTESIZE_OF_ADRESSSPACE;
 		
-		if (debug == 2)
+		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
 	}		
 }
@@ -146,12 +150,12 @@ void ControlUnit::func_JOF()
 	{
 		ic = dest;
 		
-		if (debug == 2)
+		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
 		ic += 1+BYTESIZE_OF_ADRESSSPACE;
 	
-		if (debug == 2)
+		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
 	}
 }
@@ -164,12 +168,12 @@ void ControlUnit::func_JEZ()
 	{
 		ic = dest;
 
-		if (debug == 2)
+		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
 		ic += 1+BYTESIZE_OF_ADRESSSPACE;
 		
-		if (debug == 2)
+		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
 	}
 }
@@ -182,12 +186,12 @@ void ControlUnit::func_JNO()
 	{
 		ic = dest;
 
-		if (debug == 2)
+		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
 		ic += 1+BYTESIZE_OF_ADRESSSPACE;
 
-		if (debug == 2)
+		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
 	}
 }
@@ -196,9 +200,6 @@ void ControlUnit::func_JNO()
 void ControlUnit::func_NOP()
 {
 	ic++;
-	
-	if (debug == 2)
-		printf("NOP\n");
 }
 
 /*
@@ -212,9 +213,6 @@ void ControlUnit::func_ADD()
 {
 	alu->op_add();			
 	ic++;
-			
-	if (debug == 2)
-		printf("add\n");
 }
 
 // substraction
@@ -222,63 +220,42 @@ void ControlUnit::func_SUB()
 {
 	alu->op_sub();	
 	ic++;
-			
-	if (debug == 2)
-		printf("sub\n");
 }
 
 void ControlUnit::func_AND()
 {
 	alu->op_and();		
 	ic++;
-			
-	if (debug == 2)
-		printf("and\n");
 }
 
 void ControlUnit::func_BOR()
 {
 	alu->op_or();		
 	ic++;
-			
-	if (debug == 2)
-		printf("or\n");
 }
 
 void ControlUnit::func_SHL()
 {
 	alu->op_shift_l();
 	ic++;
-			
-	if (debug == 2)
-		printf("shift_l\n");
 }
 
 void ControlUnit::func_SHR()
 {
 	alu->op_shift_r();
 	ic++;
-			
-	if (debug == 2)
-		printf("shift_r\n");
 }
 
 void ControlUnit::func_MUL()
 {
 	alu->op_mul();			
-	ic++;
-			
-	if (debug == 2)
-		printf("mul\n");		
+	ic++;		
 }
 
 void ControlUnit::func_DIV()
 {
 	alu->op_div();			
 	ic++;
-			
-	if (debug == 2)
-		printf("div\n");	
 }
 
 /*
@@ -296,9 +273,6 @@ void ControlUnit::func_LDA()
 	alu->writeA(value);
 		
 	ic += 1+BYTESIZE_OF_ADRESSSPACE;
-			
-	if (debug == 2)
-		printf("write %i from ram[%i] to reg_A\n", value, source);
 }
 
 // load from RAM into register B
@@ -309,9 +283,6 @@ void ControlUnit::func_LDB()
 	alu->writeB(value);
 		
 	ic += 1+BYTESIZE_OF_ADRESSSPACE;
-			
-	if (debug == 2)
-		printf("write %i from ram[%i] to reg_B\n", value, source);
 }
 
 // load constant value into register A
@@ -321,9 +292,6 @@ void ControlUnit::func_LDC()
 	alu->writeA(value);
 			
 	ic += 1+BYTESIZE_OF_ADRESSSPACE;
-			
-	if (debug == 2)
-		printf("write %i to reg_A\n", value);
 }
 
 // load 0 to register B
@@ -331,18 +299,12 @@ void ControlUnit::func_LD0()
 {
 	alu->writeB(0);
 	ic++;
-			
-	if (debug == 2)
-		printf("write 0 to reg_B\n");
 }
 
 void ControlUnit::func_LD1()
 {
 	alu->writeB(1);
 	ic++;
-			
-	if (debug == 2)
-		printf("write 0 to reg_B\n");
 }
 
 // write from register C into RAM
@@ -355,9 +317,6 @@ void ControlUnit::func_STR()
 	ram->store_int(value, dest);
 			
 	ic += 1+BYTESIZE_OF_ADRESSSPACE;
-			
-	if (debug == 2)
-		printf("store %i (from reg_C) to ram[%i]\n", value, dest);
 }
 
 // move data within RAM
@@ -369,20 +328,13 @@ void ControlUnit::func_MOV()
 	ram->move(source, dest);
 			
 	ic += 1 + 2*BYTESIZE_OF_ADRESSSPACE;
-			
-	if (debug == 2)
-		printf("move data in ram from %i to %i\n", source, dest);
 }
 
 // load from reg_C into reg_A
 void ControlUnit::func_RLA()
 {
 	alu->writeA(alu->getC());
-	ic++;
-			
-	if (debug == 2)
-		printf("write C to A\n");
-				
+	ic++;				
 }
 
 // load from reg_C into reg_B
@@ -390,9 +342,6 @@ void ControlUnit::func_RLB()
 {
 	alu->writeB(alu->getC());
 	ic++;
-			
-	if (debug == 2)
-		printf("write C to B\n");
 }
 
 // load max (0xFFFFFFFF) into B
@@ -400,9 +349,6 @@ void ControlUnit::func_LDM()
 {
 	alu->writeB(0xFFFFFFFF);	
 	ic++;
-			
-	if (debug == 2)
-		printf("write max to reg_B\n");
 }
 
 /*
@@ -431,7 +377,7 @@ void ControlUnit::print_vm_status(int instr)
 	else
 		printf("%12s ", "-");
 		
-	printf("| ");
+	printf("|  ");
 		
 	// Flags:
 	if (alu->isZero())
@@ -453,6 +399,9 @@ void ControlUnit::print_vm_status(int instr)
 		printf("D");
 	else
 		printf("-");
+		
+	// Registers:
+	printf(" | %8i %8i %8i", alu->getA(), alu->getB(), alu->getC());
 	
 		
 	printf("\n");
