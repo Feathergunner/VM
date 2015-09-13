@@ -6,7 +6,7 @@ VAR max
 VAR counter
 VAR res
 BEGIN
-STC 47 test
+STC 13 test
 STC 2 counter
 LDA test
 SHR

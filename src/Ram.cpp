@@ -46,7 +46,7 @@ uint8_t Ram::get_byte(uint32_t address)
 	return memory[check_address(address)];
 }
 
-// get 1+BYTESIZE_OF_ADRESSSPACE * 8 bit from address
+// get 1+WORDSIZE * 8 bit from address
 uint32_t Ram::get_int(uint32_t address)
 {
 	//if (debug)
@@ -54,10 +54,10 @@ uint32_t Ram::get_int(uint32_t address)
 	uint32_t res = 0;
 	uint8_t nextbyte;
 	// read the bytes and shift them correctly:
-	for (int i=0; i < BYTESIZE_OF_ADRESSSPACE; i++)
+	for (int i=0; i < WORDSIZE; i++)
 	{
 		nextbyte = memory[check_address(address+i)];
-		res += nextbyte<<(8*(BYTESIZE_OF_ADRESSSPACE-1-i));
+		res += nextbyte<<(8*(WORDSIZE-1-i));
 	//	if (debug)
 	//		printf("res now is: %i\nnext byte was: %i\n", res, nextbyte);
 	}
@@ -83,9 +83,9 @@ void Ram::store_int(uint32_t data, uint32_t address)
 	//if (debug)
 	//	printf("\nstart writing 32bit-int %#x to ram.\nadress is %#x\n", data, address);
 	uint8_t nextbyte;
-	for (int i=0; i<BYTESIZE_OF_ADRESSSPACE; i++)
+	for (int i=0; i<WORDSIZE; i++)
 	{
-		nextbyte = (data>>(8*(BYTESIZE_OF_ADRESSSPACE-1-i))) & 0xFF;
+		nextbyte = (data>>(8*(WORDSIZE-1-i))) & 0xFF;
 		memory[check_address(address+i)] = nextbyte;
 	//	if (debug)
 	//		printf("wrote %#x at ram[%#x = %i]\n", nextbyte, address+i, address+i);

@@ -135,7 +135,7 @@ void ControlUnit::func_JGZ()
 		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
-		ic += 1+BYTESIZE_OF_ADRESSSPACE;
+		ic += 1+WORDSIZE;
 		
 		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
@@ -153,7 +153,7 @@ void ControlUnit::func_JOF()
 		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
-		ic += 1+BYTESIZE_OF_ADRESSSPACE;
+		ic += 1+WORDSIZE;
 	
 		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
@@ -171,7 +171,7 @@ void ControlUnit::func_JEZ()
 		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
-		ic += 1+BYTESIZE_OF_ADRESSSPACE;
+		ic += 1+WORDSIZE;
 		
 		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
@@ -189,7 +189,7 @@ void ControlUnit::func_JNO()
 		if (debug > 2)
 			printf("conditional jump to %#X\n", ic);
 	} else {
-		ic += 1+BYTESIZE_OF_ADRESSSPACE;
+		ic += 1+WORDSIZE;
 
 		if (debug > 2)
 			printf("condition of jump not fulfilled\n");
@@ -272,7 +272,7 @@ void ControlUnit::func_LDA()
 			
 	alu->writeA(value);
 		
-	ic += 1+BYTESIZE_OF_ADRESSSPACE;
+	ic += 1+WORDSIZE;
 }
 
 // load from RAM into register B
@@ -282,7 +282,7 @@ void ControlUnit::func_LDB()
 	value = ram->get_int(source);
 	alu->writeB(value);
 		
-	ic += 1+BYTESIZE_OF_ADRESSSPACE;
+	ic += 1+WORDSIZE;
 }
 
 // load constant value into register A
@@ -291,7 +291,7 @@ void ControlUnit::func_LDC()
 	value = ram->get_int(ic+1);
 	alu->writeA(value);
 			
-	ic += 1+BYTESIZE_OF_ADRESSSPACE;
+	ic += 1+WORDSIZE;
 }
 
 // load 0 to register B
@@ -316,18 +316,18 @@ void ControlUnit::func_STR()
 			
 	ram->store_int(value, dest);
 			
-	ic += 1+BYTESIZE_OF_ADRESSSPACE;
+	ic += 1+WORDSIZE;
 }
 
 // move data within RAM
 void ControlUnit::func_MOV()
 {
 	source = ram->get_int(ic+1);
-	dest = ram->get_int(ic+1+BYTESIZE_OF_ADRESSSPACE);
+	dest = ram->get_int(ic+1+WORDSIZE);
 			
 	ram->move(source, dest);
 			
-	ic += 1 + 2*BYTESIZE_OF_ADRESSSPACE;
+	ic += 1 + 2*WORDSIZE;
 }
 
 // load from reg_C into reg_A

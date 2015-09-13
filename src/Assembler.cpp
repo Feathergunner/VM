@@ -77,12 +77,10 @@ int Assembler::make_preprogram()
 			// add label to next position in memory
 			// get name:
 			string name_label;
+			
 			std::string::iterator it = ((string)line_of_code).begin();
 			read_string_parameter(&it, &name_label);
-			//read_single_string_parameter(line_of_code, &name_label);
 			add_label(name_label, offset);
-			//if (debug)
-			//	printf("PRECODE: added label %s at offset %i\n",name_label, offset);
 		}
 		
 		// var
@@ -94,12 +92,8 @@ int Assembler::make_preprogram()
 			std::string::iterator it = ((string)line_of_code).begin();
 			read_string_parameter(&it, &var_name);
 			// add var:
-			int var_adress = (1+BYTESIZE_OF_ADRESSSPACE)  + (BYTESIZE_OF_ADRESSSPACE*number_of_vars);
-			add_var(var_name, var_adress);
-			
-			//if (debug)
-			//	printf("PRECODE: added var %s at adress %i\n", var_name, var_adress);
-			
+			int var_adress = (1+WORDSIZE)  + (WORDSIZE*number_of_vars);
+			add_var(var_name, var_adress);			
 		}
 			
 		// begin-label
@@ -134,7 +128,7 @@ int Assembler::make_preprogram()
 				else
 					return 2;
 					
-				offset += 1+BYTESIZE_OF_ADRESSSPACE;
+				offset += 1+WORDSIZE;
 			}
 			
 			if (type == LDC)
@@ -153,12 +147,12 @@ int Assembler::make_preprogram()
 				else
 					return 2;
 					
-				offset += 1+BYTESIZE_OF_ADRESSSPACE;
+				offset += 1+WORDSIZE;
 			}
 			
 			if (type == MOV) 
 			{
-				// case move: to variable-names
+				// case move: two variable-names
 				// read two parameters:
 				std::string::iterator it = ((string)line_of_code).begin();
 				err = read_string_parameter(&it, &p1);
@@ -173,7 +167,7 @@ int Assembler::make_preprogram()
 				else
 					return 2;
 			
-				offset += 1 + 2*BYTESIZE_OF_ADRESSSPACE;
+				offset += 1 + 2*WORDSIZE;
 			}	
 			
 			if (type == ADD || type == SUB || type == AND || type == BOR || type == MUL || type == DIV || type == SHL || type == SHR || type == LD0 || type == LDM || type == LD1 || type == RLA || type == RLB || type == NOP || type == STP)
@@ -230,7 +224,7 @@ int Assembler::make_preprogram()
 	
 	// length of header (initial jump + all vars)
 	// i.e. the basis for all precomputed adress-offsets:
-	length_of_header = (1 + BYTESIZE_OF_ADRESSSPACE) + (BYTESIZE_OF_ADRESSSPACE*number_of_vars);
+	length_of_header = (1 + WORDSIZE) + (WORDSIZE*number_of_vars);
 
 	length_of_code = length_of_header + offset;
 	
@@ -259,11 +253,11 @@ void Assembler::make_eADD(string param1, string param2)
 	preprogram.push_back(Precode(LDA, offset, param1));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(LDB, offset, param2));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(ADD, offset));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", ADD, offset);	
@@ -275,11 +269,11 @@ void Assembler::make_eSUB(string param1, string param2)
 	preprogram.push_back(Precode(LDA, offset, param1));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(LDB, offset, param2));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(SUB, offset));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", SUB, offset);	
@@ -291,11 +285,11 @@ void Assembler::make_eMUL(string param1, string param2)
 	preprogram.push_back(Precode(LDA, offset, param1));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(LDB, offset, param2));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(MUL, offset));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", MUL, offset);	
@@ -307,11 +301,11 @@ void Assembler::make_eDIV(string param1, string param2)
 	preprogram.push_back(Precode(LDA, offset, param1));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDA, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(LDB, offset, param2));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", LDB, offset);	
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(DIV, offset));
 	if (debug > 1)
 		printf("\tPRECODE: added \n\t\tcommand %i\n\t\tat offset %i\n", DIV, offset);	
@@ -323,7 +317,7 @@ void Assembler::make_STC(int value, string var_name)
 	preprogram.push_back(Precode(LDC, offset, value));
 	if (debug > 1)
 		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", LDC, offset);
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 	preprogram.push_back(Precode(LD0, offset));
 	if (debug > 1)
 		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", LD0, offset);
@@ -335,7 +329,7 @@ void Assembler::make_STC(int value, string var_name)
 	preprogram.push_back(Precode(STR, offset, var_name));
 	if (debug > 1)
 		printf("PRECODE: added \n\tcommand %i\n\tat offset %i\n", STR, offset);
-	offset += 1+BYTESIZE_OF_ADRESSSPACE;
+	offset += 1+WORDSIZE;
 }
 
 // second iteration:
@@ -409,7 +403,7 @@ int Assembler::make_program()
 		if (err == 0)
 		{
 			parse_int(value, &program[c]);
-			c += BYTESIZE_OF_ADRESSSPACE;
+			c += WORDSIZE;
 		}
 		else if (err != -1)
 			return 1;
@@ -429,7 +423,7 @@ int Assembler::make_program()
 		if (err == 0)
 		{
 			parse_int(value, &program[c]);
-			c += BYTESIZE_OF_ADRESSSPACE;
+			c += WORDSIZE;
 		}
 		else if (err != -1)
 			return 1;
@@ -449,9 +443,9 @@ void Assembler::parse_int(int param, uint8_t* destination)
 	}
 	
 	// write the int param byte-wise into byte-array destination
-	for (int i=0; i<BYTESIZE_OF_ADRESSSPACE; i++)
+	for (int i=0; i<WORDSIZE; i++)
 	{
-		uint8_t nextbyte = param>>(8*(BYTESIZE_OF_ADRESSSPACE-1-i)) & 0x000000FF;
+		uint8_t nextbyte = param>>(8*(WORDSIZE-1-i)) & 0x000000FF;
 		//if (debug)
 		//	printf("VAR: %i. byte = %i\n", i+1, nextbyte);
 		destination[i] = nextbyte;
