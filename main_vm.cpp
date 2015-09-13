@@ -11,6 +11,8 @@ int main()
 	// 2 will display all of the above, plus a statistic of executed instruction
 	// 3 will display all of the above, plus additional description during execution
 	int debug = 2;
+	
+	// sizeofram defines the number of bytes that fit into ram
 	int sizeofram = 200;
 	
 	VirtualMachine* vm = new VirtualMachine(sizeofram);
