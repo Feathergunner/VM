@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <ctime>
-
 #include "Ram.hpp"
 #include "ArithmeticalLogicalUnit.hpp"
 #include "Instructions_VM.hpp"
@@ -24,13 +23,13 @@ private:
 	Ram* ram;
 	// pointer to alu:
 	ArithmeticalLogicalUnit* alu;
+	// pointer to CommunicationUnit:
+	CommunicationUnit* comu;
 	
 	// cpu functionalities:
 	// temp values:
 	uint32_t dest, source, value;
-	
-	// current instruction
-	//int instruc;
+	uint8_t channel_id;
 	
 	void func_JMP();
 	void func_JGZ();
@@ -65,6 +64,9 @@ private:
 	void func_LDM();
 	void func_LD1();
 	
+	void func_SND();
+	void func_RCV();
+	
 	void (ControlUnit::*func[0x20])();
 	
 	// measuring / debugging:
@@ -80,7 +82,7 @@ public:
 	~ControlUnit(){}
 	
 	// execute cycle:
-	bool next_cycle(int debug = 0);	
+	bool next_cycle(int debug = 0);
 };
 
 

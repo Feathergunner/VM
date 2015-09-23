@@ -18,9 +18,9 @@ public:
 	// destructor
 	
 	// get byte from extern
-	uint8_t get_extern_value(int devicenumber);
+	uint8_t get_extern_value(int devicenumber, bool* succ);
 	// store byte to communication-register:
-	void provide_value(uint8_t byte, int devicenumber);
+	void provide_value(uint8_t byte, int devicenumber, bool* succ);
 };
 
 #endif

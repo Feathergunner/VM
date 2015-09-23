@@ -49,8 +49,8 @@ const std::vector<std::string> ASM_SYMBOLS = {
 "RLB",		// 0x1B
 "LDM",		// 0x1C
 "LD1",		// 0x1D
-	"NU",	// 0x1E
-	"NU",	// 0x1F
+"SND",		// 0x1E
+"RCV",		// 0x1F
 
 	"NU",	// 0x20
 	"NU",	// 0x21
@@ -102,8 +102,8 @@ const std::vector<int> INSTRUCTION_PARAMCOUNT = {
 0,		// 0x1B
 0,		// 0x1C
 0,		// 0x1D
-	-1,	// 0x1E
-	-1,	// 0x1F
+1,		// 0x1E
+1,		// 0x1F
 
 	-1,	// 0x20
 	-1,	// 0x21

@@ -67,4 +67,9 @@ const uint8_t LDM = 0x1C;	// 0
 // load 1 in B:
 const uint8_t LD1 = 0x1D;	// 0
 
+// send byte to extern device:
+const uint8_t SND = 0x1E;	// 1
+// get byte from extern device:
+const uint8_t RCV = 0x1F;	// 1
+
 #endif

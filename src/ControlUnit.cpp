@@ -44,8 +44,8 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_
 	func[0x1B] = &ControlUnit::func_RLB;
 	func[0x1C] = &ControlUnit::func_LDM;
 	func[0x1D] = &ControlUnit::func_LD1;
-	func[0x1E] = &ControlUnit::func_NOP;
-	func[0x1F] = &ControlUnit::func_NOP;
+	func[0x1E] = &ControlUnit::func_SND;
+	func[0x1F] = &ControlUnit::func_RCV;
 }
 
 // method to execute the next cycle
@@ -351,9 +351,39 @@ void ControlUnit::func_LDM()
 	ic++;
 }
 
+// write to CommunicationChannel
+void ControlUnit::func_SND()
+{
+	channel_id = ram->get_byte(ic+1);
+	
+	// TO DO:
+	// add check if channel exists
+	bool succ;
+	comu->provide_value(alu->getC(), channel_id, &succ);
+	if (succ)
+		ic += 2;
+}
+
+// read from CommunicationChannel
+void ControlUnit::func_RCV()
+{
+	channel_id = ram->get_byte(ic+1);
+	
+	// TO DO:
+	// add check if channel exists
+	bool succ;
+	uint8_t val = comu->get_extern_value(channel_id, &succ);
+	if (succ)
+	{
+		alu->writeA(val);
+		ic += 2;
+	}
+}
+
 /*
 ----------------------------------------------------------------------------
 	Method to display status of VM in each cycle
+----------------------------------------------------------------------------
 */
 
 void ControlUnit::print_vm_status(int instr)
