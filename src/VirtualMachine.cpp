@@ -2,6 +2,8 @@
 
 VirtualMachine::VirtualMachine()
 {
+	stop = false;
+	
 	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
 	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
 	
@@ -11,6 +13,8 @@ VirtualMachine::VirtualMachine()
 
 VirtualMachine::VirtualMachine(unsigned int ram_size)
 {
+	stop = false;
+	
 	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
 	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
 	
@@ -86,12 +90,13 @@ void VirtualMachine::run(int debug)
 {
 	printf("Starting Virtual Machine...\n");
 	cycles = 0;
+	stop = false;
 	if (debug > 0)
 	{
 		printf("%8s | %8s | %5s %12s %12s %12s | %5s | %8s %8s %8s\n", "cycle", "ic", "instr", "src", "dest", "val", "FLAGS", "reg A", "reg B", "reg C");
 		printf("---------|----------|----------------------------------------------|-------|---------------------------\n");
 	}
-	while(cpu->next_cycle(debug))
+	while(cpu->next_cycle(debug) && !stop)
 	{
 		cycles++;
 		if (debug > 2)
@@ -101,6 +106,11 @@ void VirtualMachine::run(int debug)
 	
 	if (debug > 1)
 		print_statistics();
+}
+
+void VirtualMachine::stop()
+{
+	stop = true;
 }
 
 /*

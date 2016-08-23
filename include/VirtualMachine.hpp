@@ -21,6 +21,7 @@ private:
 	// statistics measurement:
 	int* number_of_calls;
 	int cycles;
+	bool stop;
 
 public:
 	// constructors:
@@ -36,6 +37,8 @@ public:
 	void printRAM(const char* filename);
 	// start:
 	void run(int debug = 0);
+	// stop:
+	void stop();
 	
 	void print_statistics();
 	
