@@ -19,9 +19,9 @@ public:
 	// init:
 	void set_extern_device(CommunicationChannel ext_chan);
 	
-	void write_byte_to_channel(uint8_t data, bool* succ);
-	uint8_t read_byte_from_channel(bool* succ);
-	uint8_t get_byte(bool* succ);
+	void write_value_to_channel(uint32_t value, bool* succ);
+	uint32_t read_value_from_channel(bool* succ);
+	uint32_t get_value(bool* succ);
 };
 
 #endif
