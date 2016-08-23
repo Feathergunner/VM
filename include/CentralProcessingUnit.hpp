@@ -19,7 +19,7 @@ public:
 	// constructor:
 	CentralProcessingUnit(Ram* ram, int* number_of_calls);
 	// destructot:
-	~CentralProcessingUnit(){}
+	~CentralProcessingUnit();
 	
 	// execute cycle:
 	bool next_cycle(int debug = 0);

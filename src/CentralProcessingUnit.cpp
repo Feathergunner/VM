@@ -7,6 +7,12 @@ CentralProcessingUnit::CentralProcessingUnit(Ram* ram, int* number_of_calls)
 	cu = new ControlUnit(alu, ram, number_of_calls);
 }
 
+CentralProcessingUnit::~CentralProcessingUnit()
+{
+	delete alu;
+	delete cu;
+}
+
 // method to execute the next cycle
 // debug:
 //	= 0	: no debug messages
