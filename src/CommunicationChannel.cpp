@@ -1,36 +1,43 @@
 #include "CommunicationChannel.hpp"
 
-void CommunicationChannel::write_byte_to_channel(uint8_t data, bool* succ)
+CommunicationChannel::CommunicationChannel(CommunicationChannel* ext_chan)
+{
+	reg = 0;
+	flag_lock = false;
+	this->extern_channel = ext_chan;
+}
+
+void CommunicationChannel::write_value_to_channel(uint32_t data, bool* succ)
 {
 	if (!flag_lock)
 	{
-		reg = byte;
+		reg = data;
 		flag_lock = true;
-		&succ = true;
+		*succ = true;
 	}
 	else
 	{
-		&succ = false;
+		*succ = false;
 	}
 	return;
 }
 
-uint8_t CommunicationChannel::read_byte_from_channel(bool* succ)
+uint32_t CommunicationChannel::read_value_from_channel(bool* succ)
 {
-	return extern_channel.get_byte(succ);
+	return extern_channel->get_value(succ);
 }
 
-uint8_t CommunicationChannel::get_byte(bool* succ)
+uint32_t CommunicationChannel::get_value(bool* succ)
 {
 	if (flag_lock)
 	{
 		flag_lock = false;
-		&succ = true
+		*succ = true;
 		return reg;
 	}
 	else
 	{
-		&succ = false;
+		*succ = false;
 		return 0;
 	}
 }

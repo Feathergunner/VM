@@ -6,15 +6,15 @@
 class CommunicationChannel
 {
 private:
-	uint8_t reg;
+	uint32_t reg;
 	bool flag_lock;
 	
-	CommunicationChannel extern_channel;
+	CommunicationChannel* extern_channel;
 	
 public:
 	// constructor:
-	CommunicationChannel();
-	CommunicationChannel(CommunicationChannel ext_chan);
+	// CommunicationChannel(){};
+	CommunicationChannel(CommunicationChannel* ext_chan);
 	
 	// init:
 	void set_extern_device(CommunicationChannel ext_chan);

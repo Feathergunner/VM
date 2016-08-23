@@ -38,7 +38,7 @@ public:
 	// start:
 	void run(int debug = 0);
 	// stop:
-	void stop();
+	void stop_machine();
 	
 	void print_statistics();
 	

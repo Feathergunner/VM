@@ -108,7 +108,7 @@ void VirtualMachine::run(int debug)
 		print_statistics();
 }
 
-void VirtualMachine::stop()
+void VirtualMachine::stop_machine()
 {
 	stop = true;
 }

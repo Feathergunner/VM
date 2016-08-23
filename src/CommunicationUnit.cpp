@@ -5,14 +5,14 @@ CommunicationUnit::CommunicationUnit(int num_of_dev)
 	number_of_extern_devices = num_of_dev;
 	channels.reserve(num_of_dev);
 }
-uint8_t CommunicationUnit::get_extern_value(int devicenumber, bool* succ)
+uint32_t CommunicationUnit::get_extern_value(int devicenumber, bool* succ)
 {
-	byte res = channels[devicenumber].read_byte(succ);
+	uint32_t res = channels[devicenumber].read_value_from_channel(succ);
 	return res;
 }
 
-void CommunicationUnit::provide_value(uint8_t byte, int devicenumber, bool* succ)
+void CommunicationUnit::provide_value(uint32_t byte, int devicenumber, bool* succ)
 {
-	channels[devicenumber].write_byte(byte, succ);
+	channels[devicenumber].write_value_to_channel(byte, succ);
 	return;
 }

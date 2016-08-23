@@ -6,6 +6,7 @@
 #include <ctime>
 #include "Ram.hpp"
 #include "ArithmeticalLogicalUnit.hpp"
+#include "CommunicationUnit.hpp"
 #include "Instructions_VM.hpp"
 
 #include "Constants.hpp"

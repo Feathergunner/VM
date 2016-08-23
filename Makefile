@@ -13,14 +13,15 @@ INCDIR = include/
 ## EXECUTABLE = vm
 
 ## main targets:
+
+.PHONY: vm
+vm: main_vm.o  VirtualMachine.o CentralProcessingUnit.o ControlUnit.o Ram.o ArithmeticalLogicalUnit.o CommunicationChannel.o CommunicationUnit.o
+	$(CXX) -o vm $^
+
 .PHONY: asm
 asm: main_asm.o Assembler.o
 	$(CXX) -o asm $^
-
-.PHONY: vm
-vm: main_vm.o  VirtualMachine.o CentralProcessingUnit.o ControlUnit.o Ram.o ArithmeticalLogicalUnit.o
-	$(CXX) -o vm $^
-
+	
 ## secondary VM targets:
 VirtualMachine.o: src/VirtualMachine.cpp include/VirtualMachine.hpp
 	$(CXX) $(CXXFLAGS) -c $(INCLUDES) src/VirtualMachine.cpp -o $@
@@ -37,6 +38,12 @@ Ram.o: src/Ram.cpp include/Ram.hpp
 ArithmeticalLogicalUnit.o: src/ArithmeticalLogicalUnit.cpp include/ArithmeticalLogicalUnit.hpp
 	$(CXX) $(CXXFLAGS) -c $(INCLUDES) src/ArithmeticalLogicalUnit.cpp -o $@
 	
+CommunicationUnit.o: src/CommunicationUnit.cpp include/CommunicationUnit.hpp
+	$(CXX) $(CXXFLAGS) -c $(INCLUDES) src/CommunicationUnit.cpp -o $@
+	
+CommunicationChannel.o: src/CommunicationChannel.cpp include/CommunicationChannel.hpp
+	$(CXX) $(CXXFLAGS) -c $(INCLUDES) src/CommunicationChannel.cpp -o $@
+
 main_vm.o: main_vm.cpp
 	$(CXX) $(CXXFLAGS) -c $(INCLUDES) main_vm.cpp -o $@
 
