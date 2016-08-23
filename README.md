@@ -1,3 +1,9 @@
+A simplistic virtual machine and assembler implemented in C++. The basic stuff works. A general bus system with which multi-core-machines or keyboard input could be implemented is currently work in progress.
+
+
+A (very basic) documentation can be found in doc.pdf.
+
+
 To compile and run the test program Prim:
 
 1. Make asm  
@@ -24,4 +30,3 @@ runs the Virtual machine, which is initialized by the program from "mc_Prim.txt"
 See main_asm.cpp and main_vm.cpp for some general settings and to change input- and output- filenames.
 See include/Instructions_VM.hpp for an overview of all instructions provided by the virtual machine.
 
-A (very basic) documentation can be found in doc.pdf.
