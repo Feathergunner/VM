@@ -42,7 +42,9 @@ uint32_t CommunicationChannel::get_value(bool* succ)
 	}
 }
 
+/*
 bool CommunicationChannel::get_lock_status()
 {
 	return flag_lock;
 }
+*/

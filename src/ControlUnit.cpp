@@ -363,12 +363,11 @@ void ControlUnit::func_SND()
 {
 	channel_id = ram->get_byte(ic+1);
 	
-	// TO DO:
-	// add check if channel exists
-	bool succ;
-	comu->provide_value(alu->getC(), channel_id, &succ);
-	if (succ)
-		ic += 2;
+	if (channel_id < comu->get_number_of_devices())
+	{
+		comu->provide_value(alu->getC(), channel_id);
+	}
+	ic += 1;
 }
 
 // read from CommunicationChannel
@@ -376,25 +375,23 @@ void ControlUnit::func_RCV()
 {
 	channel_id = ram->get_byte(ic+1);
 	
-	// TO DO:
-	// add check if channel exists
-	bool succ;
-	uint8_t val = comu->get_extern_value(channel_id, &succ);
-	if (succ)
+	if (channel_id < comu->get_number_of_devices())
 	{
+		uint8_t val = comu->get_extern_value(channel_id);
 		alu->writeA(val);
-		ic += 2;
 	}
+	ic += 1;
 }
 
 // jump if CommunicationChannel is free
 void ControlUnit::func_JCF()
 {
-	channel_id = ram->get_byte(ic+1);
-	dest = ram->get_int(ic+2);
-	if (comu->check_lock_status(channel_id))
+	//channel_id = ram->get_byte(ic+1);
+	dest = ram->get_int(ic+1);
+
+	if (comu->check_communication_success())
 	{
-		ic = 2+WORDSIZE;
+		ic = 1+WORDSIZE;
 	}
 	else
 	{

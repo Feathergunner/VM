@@ -11,18 +11,21 @@ class CommunicationUnit
 private:
 	int number_of_extern_devices;
 	std::vector<CommunicationChannel> channels;
+	bool flag_success;
 	
 public:
 	// constructor
 	CommunicationUnit(int num_of_dev);
 	// destructor
+
+	int get_number_of_devices();
 	
 	// get value from extern:
-	uint32_t get_extern_value(int devicenumber, bool* succ);
+	uint32_t get_extern_value(int devicenumber);
 	// store value to communication-register:
-	void provide_value(uint32_t value, int devicenumber, bool* succ);
-	// check channel lock:
-	bool check_lock_status(int devicenumber);
+	void provide_value(uint32_t value, int devicenumber);
+	// check if latest communication attempt was successful:
+	bool check_communication_success();
 };
 
 #endif

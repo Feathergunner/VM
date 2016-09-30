@@ -25,7 +25,7 @@ public:
 	uint32_t get_value(bool* succ);
 
 	// check status:
-	bool get_lock_status();
+	//bool get_lock_status();
 };
 
 #endif
