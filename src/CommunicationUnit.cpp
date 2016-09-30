@@ -4,6 +4,7 @@ CommunicationUnit::CommunicationUnit(int num_of_dev)
 {
 	number_of_extern_devices = num_of_dev;
 	channels.reserve(num_of_dev);
+	flag_success = false;
 }
 
 int CommunicationUnit::get_number_of_devices()
