@@ -41,9 +41,9 @@ const std::vector<std::string> ASM_SYMBOLS = {
 "JNO",		// 0x13
 "MUL",		// 0x14
 "DIV",		// 0x15
-	"NU",	// 0x16
-	"NU",	// 0x17
-	"NU",	// 0x18
+"SND",		// 0x16
+"RCV",		// 0x17
+"JCF",		// 0x18
 	"NU",	// 0x19
 "RLA",		// 0x1A
 "RLB",		// 0x1B
@@ -94,9 +94,9 @@ const std::vector<int> INSTRUCTION_PARAMCOUNT = {
 1,		// 0x13
 1,		// 0x14
 1,		// 0x15
-	-1,	// 0x16
-	-1,	// 0x17
-	-1,	// 0x18
+1,		// 0x16
+1,		// 0x17
+1,		// 0x18
 	-1,	// 0x19
 0,		// 0x1A
 0,		// 0x1B
