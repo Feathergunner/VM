@@ -16,3 +16,9 @@ void CommunicationUnit::provide_value(uint32_t byte, int devicenumber, bool* suc
 	channels[devicenumber].write_value_to_channel(byte, succ);
 	return;
 }
+
+bool CommunicationUnit::check_lock_status(int devicenumber)
+{
+	bool lock_status = channels[devicenumber].get_lock_status();
+	return lock_status;
+}

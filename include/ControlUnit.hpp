@@ -67,6 +67,7 @@ private:
 	
 	void func_SND();
 	void func_RCV();
+	void func_JCF();
 	
 	void (ControlUnit::*func[0x20])();
 	

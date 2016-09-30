@@ -44,8 +44,10 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_
 	func[0x1B] = &ControlUnit::func_RLB;
 	func[0x1C] = &ControlUnit::func_LDM;
 	func[0x1D] = &ControlUnit::func_LD1;
-	func[0x1E] = &ControlUnit::func_SND;
-	func[0x1F] = &ControlUnit::func_RCV;
+
+	func[0x20] = &ControlUnit::func_SND;
+	func[0x21] = &ControlUnit::func_RCV;
+	func[0x22] = &ControlUnit::func_JCF;
 }
 
 // method to execute the next cycle
@@ -351,6 +353,11 @@ void ControlUnit::func_LDM()
 	ic++;
 }
 
+/*
+-----------------------------------------------------------------------------------------
+communication control instructions
+-----------------------------------------------------------------------------------------
+*/
 // write to CommunicationChannel
 void ControlUnit::func_SND()
 {
@@ -377,6 +384,21 @@ void ControlUnit::func_RCV()
 	{
 		alu->writeA(val);
 		ic += 2;
+	}
+}
+
+// jump if CommunicationChannel is free
+void ControlUnit::func_JCF()
+{
+	channel_id = ram->get_byte(ic+1);
+	dest = ram->get_int(ic+2);
+	if (comu->check_lock_status(channel_id))
+	{
+		ic = 2+WORDSIZE;
+	}
+	else
+	{
+		ic += dest;
 	}
 }
 

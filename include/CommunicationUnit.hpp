@@ -17,10 +17,12 @@ public:
 	CommunicationUnit(int num_of_dev);
 	// destructor
 	
-	// get value from extern
+	// get value from extern:
 	uint32_t get_extern_value(int devicenumber, bool* succ);
 	// store value to communication-register:
 	void provide_value(uint32_t value, int devicenumber, bool* succ);
+	// check channel lock:
+	bool check_lock_status(int devicenumber);
 };
 
 #endif
