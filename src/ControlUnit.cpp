@@ -36,9 +36,9 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_
 	func[0x13] = &ControlUnit::func_JNO;
 	func[0x14] = &ControlUnit::func_MUL;
 	func[0x15] = &ControlUnit::func_DIV;
-	func[0x16] = &ControlUnit::func_NOP;
-	func[0x17] = &ControlUnit::func_NOP;
-	func[0x18] = &ControlUnit::func_NOP;
+	func[0x16] = &ControlUnit::func_SND;
+	func[0x17] = &ControlUnit::func_RCV;
+	func[0x18] = &ControlUnit::func_JCF;
 	func[0x19] = &ControlUnit::func_NOP;
 	func[0x1A] = &ControlUnit::func_RLA;
 	func[0x1B] = &ControlUnit::func_RLB;
