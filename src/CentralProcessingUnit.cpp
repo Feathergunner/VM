@@ -1,16 +1,18 @@
 #include "CentralProcessingUnit.hpp"
 
-CentralProcessingUnit::CentralProcessingUnit(Ram* ram, int* number_of_calls)
+CentralProcessingUnit::CentralProcessingUnit(Ram* ram, int* number_of_calls, int number_of_communication_channels)
 {
 	this->ram = ram;
 	alu = new ArithmeticalLogicalUnit();
-	cu = new ControlUnit(alu, ram, number_of_calls);
+	comu = new CommunicationUnit(number_of_communication_channels);
+	cu = new ControlUnit(alu, ram, comu, number_of_calls);
 }
 
 CentralProcessingUnit::~CentralProcessingUnit()
 {
 	delete alu;
 	delete cu;
+	delete comu;
 }
 
 // method to execute the next cycle

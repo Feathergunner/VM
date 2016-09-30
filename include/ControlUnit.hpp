@@ -79,7 +79,7 @@ private:
 	void print_vm_status(int instr);
 public:
 	// constructor:
-	ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_calls);
+	ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, CommunicationUnit* comu, int* number_of_calls);
 	// destructor:
 	~ControlUnit(){}
 	

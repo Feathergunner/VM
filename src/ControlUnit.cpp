@@ -1,9 +1,10 @@
 #include "ControlUnit.hpp"
 
-ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, int* number_of_calls)
+ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, CommunicationUnit* comu, int* number_of_calls)
 {
 	this->alu = alu;
 	this->ram = ram;
+	this->comu = comu;
 	
 	this->number_of_calls = number_of_calls;
 	

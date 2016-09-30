@@ -8,7 +8,7 @@ VirtualMachine::VirtualMachine()
 	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
 	
 	ram = new Ram(0x1000);	
-	cpu = new CentralProcessingUnit(ram, number_of_calls);
+	cpu = new CentralProcessingUnit(ram, number_of_calls, 0);
 }
 
 VirtualMachine::VirtualMachine(unsigned int ram_size)
@@ -19,7 +19,7 @@ VirtualMachine::VirtualMachine(unsigned int ram_size)
 	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
 	
 	ram = new Ram(ram_size);	
-	cpu = new CentralProcessingUnit(ram, number_of_calls);
+	cpu = new CentralProcessingUnit(ram, number_of_calls, 0);
 }
 
 VirtualMachine::~VirtualMachine()
@@ -41,6 +41,7 @@ VirtualMachine::~VirtualMachine()
 // file has to start with integer giving the byte-length of the program
 void VirtualMachine::load_program_from_file(const char* filename, int debug)
 {
+	int tmp;
 	FILE* program;
 	
 	printf("Loading program...");
@@ -51,14 +52,14 @@ void VirtualMachine::load_program_from_file(const char* filename, int debug)
 		uint8_t byte;
 		int length;
 		int size;
-		fscanf(program, "%i ", &length);
+		tmp = fscanf(program, "%i ", &length);
 		if (debug > 2)
 			printf("length is: %i\n\n", length);
 		size = length;
 		
 		for (int i=0; i<size; i++)
 		{
-			fscanf(program, "%hhx ", &byte);
+			tmp = fscanf(program, "%hhx ", &byte);
 			ram->store_byte(byte, i);
 			if (debug > 2)
 				printf("ram[%3i]=\t %#04x\n", i, ram->get_byte(i));
