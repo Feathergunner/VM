@@ -10,7 +10,7 @@ class AbstractMachine
 {
 private:
 	int number_of_ram_units;
-	int numbeR_of_cpu_units;
+	int number_of_cpu_units;
 	
 	std::vector<Ram*> ram;
 	std::vector<CentralProcessingUnit*> cpu;
@@ -36,6 +36,6 @@ public:
 	virtual void run(int debug = 0) = 0;
 	
 	void print_statistics(int number_of_cpu);
-}
+};
 
 #endif
