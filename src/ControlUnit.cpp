@@ -2,6 +2,10 @@
 
 ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, CommunicationUnit* comu, int* number_of_calls)
 {
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	this->alu = alu;
 	this->ram = ram;
 	this->comu = comu;
@@ -45,10 +49,8 @@ ControlUnit::ControlUnit(ArithmeticalLogicalUnit* alu, Ram* ram, CommunicationUn
 	func[0x1B] = &ControlUnit::func_RLB;
 	func[0x1C] = &ControlUnit::func_LDM;
 	func[0x1D] = &ControlUnit::func_LD1;
-
-	func[0x20] = &ControlUnit::func_SND;
-	func[0x21] = &ControlUnit::func_RCV;
-	func[0x22] = &ControlUnit::func_JCF;
+	func[0x1E] = &ControlUnit::func_NOP;
+	func[0x1F] = &ControlUnit::func_NOP;
 }
 
 // method to execute the next cycle

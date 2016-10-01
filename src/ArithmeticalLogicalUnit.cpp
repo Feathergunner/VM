@@ -1,5 +1,19 @@
 #include "ArithmeticalLogicalUnit.hpp"
 
+ArithmeticalLogicalUnit::ArithmeticalLogicalUnit()
+{
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+}
+
+ArithmeticalLogicalUnit::~ArithmeticalLogicalUnit()
+{
+	#ifdef DEBUG
+		printf("DESTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+}
+
 /* 
 ----------------------------------------------------------------------------------------------
 	SETTER:

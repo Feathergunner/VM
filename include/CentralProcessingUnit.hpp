@@ -12,14 +12,14 @@
 class CentralProcessingUnit
 {
 private:
-	Ram* ram;
-	ControlUnit* cu;
-	ArithmeticalLogicalUnit* alu;
-	CommunicationUnit *comu;
+	Ram * ram;
+	ArithmeticalLogicalUnit * alu;
+	CommunicationUnit *	comu;
+	ControlUnit * cu;
 
 public:
 	// constructor:
-	CentralProcessingUnit(Ram* ram, int* number_of_calls, int number_of_communication_channels);
+	CentralProcessingUnit(Ram * ram, int * number_of_calls, int number_of_communication_channels);
 	// destructot:
 	~CentralProcessingUnit();
 	

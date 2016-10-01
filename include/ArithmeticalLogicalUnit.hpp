@@ -2,6 +2,7 @@
 #define ArithmeticalLogicalUnit_h
 
 #include <stdint.h>
+#include <stdio.h>
 
 class ArithmeticalLogicalUnit
 {
@@ -25,9 +26,9 @@ private:
 	
 public:	
 	// constructor:
-	ArithmeticalLogicalUnit(){};
+	ArithmeticalLogicalUnit();
 	// destructor:
-	~ArithmeticalLogicalUnit(){}
+	~ArithmeticalLogicalUnit();
 	
 	// register operations:
 	void writeA(uint32_t data);

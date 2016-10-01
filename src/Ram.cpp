@@ -2,6 +2,10 @@
 
 Ram::Ram()
 {
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	size = 0x1000;
 	memory = (uint8_t*)malloc(size);
 	memset(memory, 0, size);
@@ -9,6 +13,10 @@ Ram::Ram()
 
 Ram::Ram(uint32_t size)
 {
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	this->size = size;
 	memory = (uint8_t*)malloc(size);
 	memset(memory, 0, size);
@@ -16,11 +24,19 @@ Ram::Ram(uint32_t size)
 
 Ram::~Ram()
 {
+	#ifdef DEBUG
+		printf("DESTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	free(memory);
 }
 
 uint32_t Ram::get_ramsize()
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	return size;
 }
 
@@ -28,6 +44,10 @@ uint32_t Ram::get_ramsize()
 // realizes circular organized memory
 uint32_t Ram::check_address(uint32_t address)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	if (address < size)
 		return address;
 	else 
@@ -43,12 +63,20 @@ uint32_t Ram::check_address(uint32_t address)
 // get 8 bit from address
 uint8_t Ram::get_byte(uint32_t address)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	return memory[check_address(address)];
 }
 
 // get 1+WORDSIZE * 8 bit from address
 uint32_t Ram::get_int(uint32_t address)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	//if (debug)
 	//	printf("\nstart reading 32bit-int from ram.\nadress is %#x\n", address);
 	uint32_t res = 0;
@@ -73,6 +101,10 @@ uint32_t Ram::get_int(uint32_t address)
 // writes 8 bit to address
 void Ram::store_byte(uint8_t data, uint32_t address)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	memory[check_address(address)] = data;
 	//memory[address] = data;
 }
@@ -80,6 +112,10 @@ void Ram::store_byte(uint8_t data, uint32_t address)
 // writes 32 bit to address
 void Ram::store_int(uint32_t data, uint32_t address)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	//if (debug)
 	//	printf("\nstart writing 32bit-int %#x to ram.\nadress is %#x\n", data, address);
 	uint8_t nextbyte;
@@ -94,6 +130,10 @@ void Ram::store_int(uint32_t data, uint32_t address)
 
 void Ram::move(uint32_t source, uint32_t destination)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	// copies data from source to destination
 	memory[check_address(destination)] = memory[check_address(source)];
 }
@@ -106,6 +146,10 @@ void Ram::move(uint32_t source, uint32_t destination)
 
 void Ram::print_ram(const char* filename)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	// writes memory to file
 	FILE* ramfile;
 	ramfile = fopen(filename, "w");

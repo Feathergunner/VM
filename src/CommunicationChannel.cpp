@@ -2,6 +2,10 @@
 
 CommunicationChannel::CommunicationChannel(CommunicationChannel* ext_chan)
 {
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	reg = 0;
 	flag_lock = false;
 	this->extern_channel = ext_chan;

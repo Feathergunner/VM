@@ -2,24 +2,32 @@
 
 VirtualMachine::VirtualMachine()
 {
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	stop = false;
 	
 	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
 	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
 	
-	ram = new Ram(0x1000);	
-	cpu = new CentralProcessingUnit(ram, number_of_calls, 0);
+	ram = new Ram(0x1000);
+	cpu = new CentralProcessingUnit(ram, number_of_calls, 1);
 }
 
 VirtualMachine::VirtualMachine(unsigned int ram_size)
 {
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	stop = false;
 	
 	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
 	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
-	
-	ram = new Ram(ram_size);	
-	cpu = new CentralProcessingUnit(ram, number_of_calls, 0);
+
+	ram = new Ram(ram_size);
+	cpu = new CentralProcessingUnit(ram, number_of_calls, 1);
 }
 
 VirtualMachine::~VirtualMachine()
@@ -41,6 +49,10 @@ VirtualMachine::~VirtualMachine()
 // file has to start with integer giving the byte-length of the program
 void VirtualMachine::load_program_from_file(const char* filename, int debug)
 {
+	#ifdef DEBUG
+		printf("FUNSCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	int tmp;
 	FILE* program;
 	
@@ -72,6 +84,10 @@ void VirtualMachine::load_program_from_file(const char* filename, int debug)
 // loads program passed as byte-array
 void VirtualMachine::load_program(uint8_t* program, int length)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	for (int i=0; i<length; i++)
 		ram->store_byte(program[i], i);
 }
@@ -89,6 +105,10 @@ void VirtualMachine::load_program(uint8_t* program, int length)
 //	= 2 : all messages
 void VirtualMachine::run(int debug)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	printf("Starting Virtual Machine...\n");
 	cycles = 0;
 	stop = false;
@@ -111,6 +131,10 @@ void VirtualMachine::run(int debug)
 
 void VirtualMachine::stop_machine()
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	stop = true;
 }
 
@@ -122,11 +146,19 @@ void VirtualMachine::stop_machine()
 
 void VirtualMachine::printRAM(const char* filename)
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	ram->print_ram(filename);
 }
 
 void VirtualMachine::print_statistics()
 {
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
 	printf("\n### STATISTICS ###\n\n");
 	printf(" INSTRUCTION | #CALLS\n");
 	printf("---------------------\n");
