@@ -2,6 +2,7 @@
 #define Communicationchannel_h
 
 #include <stdint.h>
+#include <stdio.h>
 
 class CommunicationChannel
 {
@@ -13,7 +14,6 @@ private:
 	
 public:
 	// constructor:
-	// CommunicationChannel(){};
 	CommunicationChannel(CommunicationChannel* ext_chan);
 	
 	// init:
