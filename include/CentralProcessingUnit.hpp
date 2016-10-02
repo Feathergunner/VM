@@ -14,6 +14,7 @@ class CentralProcessingUnit
 private:
 	int id;
 	int cycles;
+	bool stop;
 	int* number_of_calls;
 
 	Ram * ram;
@@ -31,6 +32,9 @@ public:
 	
 	// execute cycle:
 	bool next_cycle(int debug = 0);
+
+	//get status:
+	bool has_stopped();
 
 	// print statistics of this cpu:
 	void print_statistics();

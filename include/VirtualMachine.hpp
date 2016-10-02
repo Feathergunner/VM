@@ -21,7 +21,6 @@ private:
 	// statistics measurement:
 	int* number_of_calls;
 	int cycles;
-	bool stop;
 
 public:
 	// constructors:

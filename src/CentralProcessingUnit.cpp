@@ -8,6 +8,7 @@ CentralProcessingUnit::CentralProcessingUnit(int id, Ram * ram, int * number_of_
 
 	this->id = id;
 	cycles = 0;
+	stop = false;
 
 	this->number_of_calls = number_of_calls;
 	this->ram = ram;
@@ -39,7 +40,11 @@ bool CentralProcessingUnit::next_cycle(int debug)
 	#endif
 
 	cycles++;
-	return cu->next_cycle(debug);
+	bool status = cu->next_cycle(debug);
+	if (!status)
+		stop = false;
+
+	return status;
 }
 
 void CentralProcessingUnit::print_statistics()
@@ -55,4 +60,9 @@ void CentralProcessingUnit::print_statistics()
 	printf("---------------------\n");
 	printf("       TOTAL | %6i\n", cycles+1);
 	printf("\n### END ###\n\n");
+}
+
+bool CentralProcessingUnit::has_stopped()
+{
+	return stop;
 }
