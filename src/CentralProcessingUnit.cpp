@@ -40,11 +40,8 @@ bool CentralProcessingUnit::next_cycle(int debug)
 	#endif
 
 	cycles++;
-	bool status = cu->next_cycle(debug);
-	if (!status)
-		stop = false;
 
-	return status;
+	return cu->next_cycle(debug);
 }
 
 void CentralProcessingUnit::print_statistics()
@@ -62,7 +59,12 @@ void CentralProcessingUnit::print_statistics()
 	printf("\n### END ###\n\n");
 }
 
-bool CentralProcessingUnit::has_stopped()
+void CentralProcessingUnit::stop_cpu()
+{
+	stop = true;
+}
+
+bool CentralProcessingUnit::is_stopped()
 {
 	return stop;
 }

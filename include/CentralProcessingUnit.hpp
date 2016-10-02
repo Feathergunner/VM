@@ -33,8 +33,11 @@ public:
 	// execute cycle:
 	bool next_cycle(int debug = 0);
 
+	// brute-force stop cpu from extern:
+	void stop_cpu();
+
 	//get status:
-	bool has_stopped();
+	bool is_stopped();
 
 	// print statistics of this cpu:
 	void print_statistics();
