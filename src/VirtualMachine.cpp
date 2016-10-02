@@ -159,15 +159,5 @@ void VirtualMachine::print_statistics()
 		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
 	#endif
 
-	printf("\n### STATISTICS ###\n\n");
-	printf(" INSTRUCTION | #CALLS\n");
-	printf("---------------------\n");
-	for (int i=0; i<NUMBER_OF_INSTRUCTIONS_VM; i++)
-	{
-		if (INSTRUCTION_PARAMCOUNT[i] >= 0)
-			printf("  %#4X (%3s) | %6i\n", i, ASM_SYMBOLS[i].c_str(), number_of_calls[i]);
-	}
-	printf("---------------------\n");
-	printf("       TOTAL | %6i\n", cycles+1);
-	printf("\n### END ###\n\n");
+	cpu->print_statistics();
 }
