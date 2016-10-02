@@ -1,5 +1,6 @@
 #include "CommunicationChannel.hpp"
 
+/*
 CommunicationChannel::CommunicationChannel(CommunicationChannel* ext_chan)
 {
 	#ifdef DEBUG
@@ -8,6 +9,24 @@ CommunicationChannel::CommunicationChannel(CommunicationChannel* ext_chan)
 
 	reg = 0;
 	flag_lock = false;
+	this->extern_channel = ext_chan;
+}
+*/
+
+CommunicationChannel::CommunicationChannel()
+{
+
+	#ifdef DEBUG
+		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
+	#endif
+	
+	reg = 0;
+	flag_lock = false;
+	this->extern_channel = this;	
+}
+
+void CommunicationChannel::set_extern_device(CommunicationChannel* ext_chan)
+{
 	this->extern_channel = ext_chan;
 }
 

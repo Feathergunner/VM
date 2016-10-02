@@ -17,6 +17,9 @@ public:
 	// constructor
 	CommunicationUnit(int num_of_dev);
 	// destructor
+	~CommunicationUnit(){};
+
+	void set_extern_CommunicationChannel(int id, CommunicationChannel* ext_dev);
 
 	int get_number_of_devices();
 	

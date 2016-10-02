@@ -7,8 +7,21 @@ CommunicationUnit::CommunicationUnit(int num_of_dev)
 	#endif
 
 	number_of_extern_devices = num_of_dev;
-	channels.reserve(num_of_dev);
+	//channels.reserve(num_of_dev);
+	channels = std::vector<CommunicationChannel>(num_of_dev);
 	flag_success = false;
+}
+
+void CommunicationUnit::set_extern_CommunicationChannel(int id, CommunicationChannel* ext_dev)
+{
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
+	if (id < number_of_extern_devices)
+	{
+		channels[id].set_extern_device(ext_dev);
+	}
 }
 
 int CommunicationUnit::get_number_of_devices()
