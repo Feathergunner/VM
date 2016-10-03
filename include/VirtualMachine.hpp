@@ -19,7 +19,6 @@ private:
 	CentralProcessingUnit* cpu;
 	
 	// statistics measurement:
-	int* number_of_calls;
 	int cycles;
 
 public:

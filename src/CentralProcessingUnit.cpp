@@ -1,6 +1,6 @@
 #include "CentralProcessingUnit.hpp"
 
-CentralProcessingUnit::CentralProcessingUnit(int id, Ram * ram, int * number_of_calls, int number_of_communication_channels)
+CentralProcessingUnit::CentralProcessingUnit(int id, Ram * ram, int number_of_communication_channels)
 {
 	#ifdef DEBUG
 		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
@@ -10,7 +10,9 @@ CentralProcessingUnit::CentralProcessingUnit(int id, Ram * ram, int * number_of_
 	cycles = 0;
 	stop = false;
 
-	this->number_of_calls = number_of_calls;
+	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
+	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
+
 	this->ram = ram;
 	alu = new ArithmeticalLogicalUnit();
 	comu = new CommunicationUnit(number_of_communication_channels);
@@ -22,6 +24,8 @@ CentralProcessingUnit::~CentralProcessingUnit()
 	#ifdef DEBUG
 		printf("DESTRUCTOR: %s\n", __PRETTY_FUNCTION__);
 	#endif
+
+	free(number_of_calls);
 
 	delete alu;
 	delete cu;

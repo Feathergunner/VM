@@ -24,9 +24,9 @@ private:
 
 public:
 	// constructors:
-	CentralProcessingUnit(int id, Ram * ram, int * number_of_calls, int number_of_communication_channels);
-	CentralProcessingUnit(Ram * ram, int * number_of_calls, int number_of_communication_channels):
-		CentralProcessingUnit(0, ram, number_of_calls, number_of_communication_channels){};
+	CentralProcessingUnit(int id, Ram * ram, int number_of_communication_channels);
+	CentralProcessingUnit(Ram * ram, int number_of_communication_channels):
+		CentralProcessingUnit(0, ram, number_of_communication_channels){};
 	// destructot:
 	~CentralProcessingUnit();
 	

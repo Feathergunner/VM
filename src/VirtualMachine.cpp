@@ -6,11 +6,8 @@ VirtualMachine::VirtualMachine()
 		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
 	#endif
 	
-	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
-	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
-	
 	ram = new Ram(0x1000);
-	cpu = new CentralProcessingUnit(ram, number_of_calls, 1);
+	cpu = new CentralProcessingUnit(ram, 1);
 }
 
 VirtualMachine::VirtualMachine(unsigned int ram_size)
@@ -18,20 +15,15 @@ VirtualMachine::VirtualMachine(unsigned int ram_size)
 	#ifdef DEBUG
 		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
 	#endif
-	
-	number_of_calls = (int*)malloc(NUMBER_OF_INSTRUCTIONS*4);
-	memset(number_of_calls, 0, NUMBER_OF_INSTRUCTIONS*4);
 
 	ram = new Ram(ram_size);
-	cpu = new CentralProcessingUnit(ram, number_of_calls, 1);
+	cpu = new CentralProcessingUnit(ram, 1);
 }
 
 VirtualMachine::~VirtualMachine()
 {
 	delete &ram;
 	delete &cpu;
-	
-	free(number_of_calls);
 }
 
 /*
