@@ -39,7 +39,9 @@ uint32_t CommunicationUnit::get_extern_value(int devicenumber)
 		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
 	#endif
 
-	uint32_t res = channels[devicenumber].read_value_from_channel(&flag_success);
+	uint32_t res = 0;
+	if (devicenumber < number_of_extern_devices)
+		res = channels[devicenumber].read_value_from_channel(&flag_success);
 	return res;
 }
 
@@ -49,7 +51,8 @@ void CommunicationUnit::provide_value(uint32_t byte, int devicenumber)
 		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
 	#endif
 
-	channels[devicenumber].write_value_to_channel(byte, &flag_success);
+	if (devicenumber < number_of_extern_devices)
+		channels[devicenumber].write_value_to_channel(byte, &flag_success);
 	return;
 }
 
