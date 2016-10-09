@@ -24,6 +24,15 @@ void CommunicationUnit::set_extern_CommunicationChannel(int id, CommunicationCha
 	}
 }
 
+CommunicationChannel* CommunicationUnit::get_communication_channel_link(int id)
+{
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
+	return &(channels[id]);
+}
+
 int CommunicationUnit::get_number_of_devices()
 {
 	#ifdef DEBUG

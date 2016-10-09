@@ -20,6 +20,7 @@ public:
 	~CommunicationUnit(){};
 
 	void set_extern_CommunicationChannel(int id, CommunicationChannel* ext_dev);
+	CommunicationChannel* get_communication_channel_link(int id);
 
 	int get_number_of_devices();
 	

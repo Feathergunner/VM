@@ -105,6 +105,7 @@ void VirtualMachine::run(int debug)
 		printf("%8s | %8s | %5s %12s %12s %12s | %5s | %8s %8s %8s\n", "cycle", "ic", "instr", "src", "dest", "val", "FLAGS", "reg A", "reg B", "reg C");
 		printf("---------|----------|----------------------------------------------|-------|---------------------------\n");
 	}
+	
 	while(cpu->next_cycle(debug) && !cpu->is_stopped())
 	{
 		cycles++;
