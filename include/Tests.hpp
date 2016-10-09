@@ -6,13 +6,16 @@
 #include <vector>
 
 #include "VirtualMachine.hpp"
+#include "GenericMachine.hpp"
 #include "Constants.hpp"
 
 class Tests
 {
 private:
 	VirtualMachine *vm;
-	bool is_initialized;
+	GenericMachine *gvm;
+	bool vm_is_initialized;
+	bool gvm_is_initialized;
 	int debug;
 	std::string program_name;
 
@@ -22,8 +25,10 @@ private:
 public:
 	Tests(int debug=3);
 	~Tests(){};
-	void init_random(int size_of_programm);
+	void vm_init_random(int size_of_programm);
+	void gvm_init_random(int size_of_programm);
 	void run_vm();
+	void run_gvm();
 };
 
 #endif

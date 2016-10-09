@@ -33,7 +33,7 @@ int main()
 	int debug = 2;
 
 	Tests t = Tests(debug);
-	t.init_random(100);
+	t.vm_init_random(100);
 	t.run_vm();
 
 	//example(debug);

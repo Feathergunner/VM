@@ -6,11 +6,12 @@ Tests::Tests(int debug)
 		printf("CONSTRUCTOR: %s\n", __PRETTY_FUNCTION__);
 	#endif
 
-	is_initialized = false;
+	vm_is_initialized = false;
+	gvm_is_initialized = false;
 	this->debug = debug;
 }
 
-void Tests::init_random(int size_of_programm)
+void Tests::vm_init_random(int size_of_programm)
 {
 	#ifdef DEBUG
 		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
@@ -34,7 +35,34 @@ void Tests::init_random(int size_of_programm)
 	vm->load_program(randprog, size_of_programm);
 
 
-	is_initialized = true;
+	vm_is_initialized = true;
+}
+
+void Tests::gvm_init_random(int size_of_programm)
+{
+	#ifdef DEBUG
+		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
+	#endif
+
+	program_name = "random";
+	// create vm:
+	//unsigned int sizeofram = 200;
+	gvm = new GenericMachine();
+
+	// create random program:
+	uint8_t* randprog;
+
+	randprog = (uint8_t*)malloc(size_of_programm);
+	srand(time(NULL));
+
+	for (int i=0; i<size_of_programm; i++)
+		randprog[i] = rand() % NUMBER_OF_INSTRUCTIONS;
+
+	// load programm:
+	gvm->load_program(randprog, size_of_programm);
+
+
+	gvm_is_initialized = true;
 }
 
 void Tests::run_vm()
@@ -43,7 +71,7 @@ void Tests::run_vm()
 		printf("FUNCTION: %s\n", __PRETTY_FUNCTION__);
 	#endif
 
-	if (is_initialized)
+	if (vm_is_initialized)
 	{
 		if (debug > 2)
 		{

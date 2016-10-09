@@ -9,7 +9,7 @@ INCDIR = include/
 
 ## main targets:
 .PHONY: vm
-vm: objects/main_vm.o  objects/VirtualMachine.o objects/CentralProcessingUnit.o objects/ControlUnit.o objects/Ram.o objects/ArithmeticalLogicalUnit.o objects/CommunicationChannel.o objects/CommunicationUnit.o objects/Tests.o
+vm: objects/main_vm.o objects/GenericMachine.o objects/VirtualMachine.o objects/CentralProcessingUnit.o objects/ControlUnit.o objects/Ram.o objects/ArithmeticalLogicalUnit.o objects/CommunicationChannel.o objects/CommunicationUnit.o objects/Tests.o
 	$(CXX) -o vm $^
 
 .PHONY: asm
