@@ -1,34 +1,35 @@
-A simplistic virtual machine and assembler implemented in C++. The basic stuff works. A general bus system with which multi-core-machines or keyboard input could be implemented ~is currently~ was at some time work in progress (but it would still be cool to have it implemented some day!).
+# A simplistic virtual machine and assembler implemented in C++.
+The basic stuff works. A general bus system with which multi-core-machines or keyboard input could be implemented ~is currently~ was at some time work in progress (but it would still be cool to have it implemented some day!).
 
 ![Architecture sketch](vm_architecture.png)
 
 
-A (very basic) documentation can be found in doc.pdf.
-
+A (very basic) documentation can be found in `doc.pdf`.
+An example program (in assembler) can be found in `Prim.txt`.
 
 To compile and run the test program Prim:
 
-1. Make asm  
+1. `Make asm`
 compiles main_asm.cpp, creates a program called asm
   
   
-2. Make vm  
+2. `Make vm`
 compiles main_vm.cpp, creates a program called vm
 
-3. run asm  
+3. `run asm`
 compiles the programm in "Prim.txt" from assembly-code to machine-code. Creates a new file "mc_Prim.txt".
   
   
-4. run vm  
+4. `run vm`
 runs the Virtual machine, which is initialized by the program from "mc_Prim.txt"
 
 
 5. enjoy :)
 
 
-6. see the file ram.txt which is displays the status of the ram of the vm at termination.
+6. see the file `ram.txt` which is displays the status of the ram of the vm at termination.
 
 
-See main_asm.cpp and main_vm.cpp for some general settings and to change input- and output- filenames.
-See include/Instructions_VM.hpp for an overview of all instructions provided by the virtual machine.
+See `main_asm.cpp` and `main_vm.cpp` for some general settings and to change input- and output- filenames.
+See `include/Instructions_VM.hpp` for an overview of all instructions provided by the virtual machine.
 
